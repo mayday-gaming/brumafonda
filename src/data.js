@@ -1,0 +1,587 @@
+// ===================== DATI DEL MONDO =====================
+const ROOMS = {};
+function defRoom(key,o){ ROOMS[key]=o; }
+
+// ---------- OVERWORLD ----------
+defRoom('ow:1,2',{name:'Brumafonda',music:'village',dark:0.1,
+ map:[
+ "TTTTTTTPPTTTTTTT",
+ "THHH..,PP,..HHHT",
+ "THHH.l.PP.l.HHHT",
+ "T..n...PP.n..a.T",
+ "PPPPPPPLLPPPPPPP",
+ "PPPPP..LL..PPPPP",
+ "P.,..s.PP..,..fP",
+ "T..l...PP...l..T",
+ "THHH...PP..B.BBT",
+ "THHH.n.PP.,.B$BT",
+ "TTTTTTTPPTTTTTTT"],
+ npcs:['orsola','lalla','tito'],
+ signs:['BRUMAFONDA — Qui la notte è gentile, finché la Grande Lanterna arde.']});
+
+defRoom('ow:0,2',{name:'Radura dei Sussurri',music:'field',dark:0.15,
+ map:[
+ "TTTTTTT..TTTTTTT",
+ "TT.,...,......TT",
+ "T..1....WWWW..fT",
+ "T.....WWWWWWW..T",
+ "T..s..WWcWWWW...",
+ "T...O.WW.OWWW...",
+ "T..,..WWWWWWW...",
+ "T......WWWWW.1.T",
+ "T.B.,.......,..T",
+ "TTBB...,..B.TTTT",
+ "TTTTTTT..TTTTTTT"],
+ signs:["Radura dei Sussurri. Sull'isolotto riposa un cuore spezzato. Chi non ha ali, cerchi dei pali."]});
+
+defRoom('ow:0,1',{name:'Bosco Muschiato',music:'field',dark:0.3,
+ map:[
+ "TTTTTTTTTTTTTTTT",
+ "TTmRRRRERRRm.fTT",
+ "T.m....P....m..T",
+ "T...1..P..m...,T",
+ "T.m....PPPPPPPPP",
+ "T..s.m.P...1....",
+ "T......P..m.....",
+ "T.m..1.P.....m.T",
+ "T...,..P.,..B..T",
+ "TTm....PP..mBBTT",
+ "TTTTTTT..TTTTTTT"],
+ signs:["↑ Tana del Fungo. Vietato l'ingresso ai deboli di naso."],
+ warps:[{to:'d1:1,2',x:7,y:8}]});
+
+defRoom('ow:1,1',{name:'Crocevia del Viandante',music:'field',dark:0.12,
+ map:[
+ "TTTTTTTPPTTTTTTT",
+ "TRRRTT.PP.TTTTTT",
+ "TRcRT..PP...,.TT",
+ "TRZR...PP......T",
+ "P.....,PP......P",
+ "PPPPPPPPPPPPPPPP",
+ "P..s....PP..n..P",
+ "T..B....PP...,.T",
+ "TB.B.f..PP..1..T",
+ "TTB.....PP....TT",
+ "TTTTTTTPPTTTTTTT"],
+ npcs:['ugo'],
+ signs:["↑ Abisso del Vento   ← Bosco Muschiato   → Prato delle Rane   ↓ Brumafonda"]});
+
+defRoom('ow:1,0',{name:'Abisso del Vento',music:'wind',dark:0.1,
+ map:[
+ "RRRRRRRRRRRRRRRR",
+ "R..f....,...2..R",
+ "R..s...O....j..R",
+ "R..............R",
+ "GGGGGGGGGGGGG...",
+ "GGGGGGGGGGGGG...",
+ "GGGGGGGGGGGGG...",
+ "R.......2...RRRR",
+ "R....,..O...RRRR",
+ "R.......,...RRRR",
+ "RRRRRRRPPRRRRRRR"],
+ signs:["Chi vola senza ali, si aggrappa ai pali. — Ugo"]});
+
+defRoom('ow:2,0',{name:'Ai piedi del Campanile',music:'wind',dark:0.15,
+ map:[
+ "RRRRRRRRRRRRRRRR",
+ "RRR##########RRR",
+ "RRR##########RRR",
+ "RR.###XEX####.RR",
+ ".........,......",
+ "...2......s.....",
+ "................",
+ "R..,....3.....RR",
+ "RR......f....RRR",
+ "RRRR........RRRR",
+ "RRRRRRRRRRRRRRRR"],
+ signs:["Campanile Spezzato. Le sue porte si aprono solo a chi porta la luce."],
+ warps:[{to:'d3:1,2',x:7,y:8,lock:'torches'}]});
+
+defRoom('ow:3,0',{name:'Soglia del Nido',music:'dark',dark:0.45,
+ map:[
+ "RRRRRRRRRRRRRRRR",
+ "RRRRRR#E#RRRRRRR",
+ "RRRRRR#.#RRRRRRR",
+ "RRRR..#M#..RRRRR",
+ "....,.......g..R",
+ ".....s...g...g.R",
+ "..........,....R",
+ "R...2......2...R",
+ "R.....,......f.R",
+ "RR...........RRR",
+ "RRRRRRRRRRRRRRRR"],
+ signs:["Nido della Falena. Tre fiamme per tre sigilli."],
+ graves:["Cenerale ha vegliato qui. Non è mai stato sepolto.","Falena n.1, Falena n.2, Falena n.3... ha smesso di contare.","Il buio non è cattivo. Ha solo paura di restare solo."],
+ warps:[{to:'fn:0,1',x:7,y:8}]});
+
+defRoom('ow:2,1',{name:'Prato delle Rane',music:'field',dark:0.12,
+ map:[
+ "TTTTTTTTTTTTTTTT",
+ "TT,..b....b..,TT",
+ "T...WWWWWWWW...T",
+ "T..bWWWWWWWWb..T",
+ "...WWWWWWWWWW...",
+ "..sWWWWWWWWWW...",
+ "...WWWWWWWWWW...",
+ "T...WWWWWWWW..1T",
+ "T..,..WWWW.....T",
+ "TT.f...PP..,..TT",
+ "TTTTTTTPPTTTTTTT"],
+ frogs:['verde','rossa','blu','gialla'],
+ signs:["Il Coro del Lago canta così: ROSSA, VERDE, GIALLA, BLU. Le rane non sbagliano mai. Tu?"]});
+
+defRoom('ow:3,1',{name:'Cimitero dei Lampioni',music:'dark',dark:0.55,
+ map:[
+ "TTTTTTTTTTTTTTTT",
+ "T.g.g.g..###...T",
+ "T........#j#.g.T",
+ "T.g.g.g..#Z#...T",
+ "...........,..gT",
+ "..l..6.....l...T",
+ "......s.....6..T",
+ "T.g.g.g.......fT",
+ "T.......g.g.g..T",
+ "T.l..........l.T",
+ "TTTTTTTTTTTTTTTT"],
+ signs:["Cimitero dei Lampioni. Qui riposano i lampionai di Brumafonda. Rispettate il silenzio. E le lapidi."],
+ graves:[
+ "Qui giace Gualtiero, lampionaio. Accese diecimila lampioni. Spense una sola candela: quella della sua torta.",
+ "Bug #404. Mai trovato.",
+ "Ernesta, che disse: «Ma cosa vuoi che succeda se tocco la falena?»",
+ "Qui riposa un salvataggio corrotto. Pace all'anima sua.",
+ "Pippo il Primo, lucciola. Brillò poco, ma brillò bene.",
+ "Torno subito. — Il Fantasma",
+ "Ha premuto il tasto sbagliato. Una volta sola.",
+ "Il Cavaliere senza Pertica. Sfidò un cespuglio a mani nude. Perse.",
+ "Anselmo. Amava i gatti. I gatti lo tolleravano.",
+ "Rosalba la Fornaia. Il suo pane era duro, il suo cuore no.",
+ "Questa lapide è vuota. Per ora.",
+ "Lampionaio Ignoto. Accese la luce per tutti, e nessuno ricorda il suo nome.",
+ "Se stai leggendo questa lapide hai davvero troppo tempo libero. Ti vogliamo bene.",
+ "Qui giace la mia pazienza. — Nonna Orsola"]});
+
+defRoom('ow:2,2',{name:'Campi del Mulino',music:'field',dark:0.08,
+ map:[
+ "TTTTTTTPPTTTTTTT",
+ "T..HHH.PP.,,,,,T",
+ "T..HHH.PP.,,,,,T",
+ "T...n..PP.FFFFFT",
+ "PPPPPPPPPPPPPVPP",
+ "P..1.....B...VPP",
+ "P......f.....VPP",
+ "T.,.,.,.,.FFFFFT",
+ "T,1,.,.,.,.,.,.T",
+ "T.,.,.,$,.,.,.,T",
+ "TTTTTTTTTTTTTTTT"],
+ npcs:['fausto']});
+
+defRoom('ow:3,2',{name:'Scogliera del Pescatore',music:'sea',dark:0.08,
+ map:[
+ "TTTTTTTTTTTTTTTT",
+ "TT..,....RRRRRRR",
+ "T....5...RWWWWWW",
+ "T..,.....RWWWWWW",
+ "PPPPPP...RWWWWWW",
+ "P...PPP..RWWWWWW",
+ "P..n..PP.RWWWWWW",
+ "T......PPRRRWWWW",
+ "T.f..,..PSSSRWWW",
+ "TT......PSSSSRWW",
+ "TTTTTTTPPRRRRRWW"],
+ npcs:['barnaba']});
+
+defRoom('ow:3,3',{name:'Faro Sommerso',music:'sea',dark:0.1,floor:'S',
+ map:[
+ "RRRRRRRPPRRRRRWW",
+ "RSSSSSSPPSSSWWWW",
+ "RSS5SSSPPSSSWWWW",
+ "RSSSSSSSSWWWW##W",
+ "SSSSSSSSS====E#W",
+ "SSSS5SSSSWWWW##W",
+ "SSSSSSSSSWWWWWWW",
+ "RSS,SSSSSSWWWWWW",
+ "RSSSSSfSSSWWWWWW",
+ "RRSSSSSSSWWWWWWW",
+ "RRRRRRRRRWWWWWWW"],
+ warps:[{to:'d2:1,3',x:7,y:8}]});
+
+defRoom('ow:2,3',{name:'Costa delle Conchiglie',music:'sea',dark:0.06,floor:'S',
+ map:[
+ "TTTTTTTTTTTTTTTT",
+ "T,..,...T..,...T",
+ "TSSSSSSSSSSSSSST",
+ "RSSS$SSSS5SSSSSR",
+ "SSSSSSSSSSSSSSSS",
+ "SSSn.SSS$SSSSSSS",
+ "SSSSSSS5SSSSSSSS",
+ "RSSSSSSSSSSSf$SR",
+ "RWWWWSSSSSWWWWWR",
+ "WWWWWWWWWWWWWWWW",
+ "WWWWWWWWWWWWWWWW"],
+ npcs:['marinella']});
+
+defRoom('ow:1,3',{name:'Bottega di Ciottolo',music:'village',dark:0.1,
+ map:[
+ "TTTTTTTPPTTTTTTT",
+ "T.HHH..PP...,..T",
+ "T.HHH..PP..B.B.T",
+ "T..n...PP......T",
+ "PPPPPPPPPPPPPPVP",
+ "P..,....PP....VP",
+ "P.......PP....VP",
+ "T..s....PP...,FT",
+ "TB.,....PP.....T",
+ "TBB..f..PP..BB$T",
+ "TTTTTTTTTTTTTTTT"],
+ npcs:['ciottolo'],
+ signs:["Bottega di Ciottolo — Si accettano conchiglie. Non si accettano lamentele."]});
+
+defRoom('ow:0,3',{name:'Palude Sussurrante',music:'dark',dark:0.3,
+ map:[
+ "TTTTTTT..TTTTTTT",
+ "Tww...w..www,.TT",
+ "Tw.n..ww.www..wT",
+ "T..wwwwww..4...T",
+ "Tww.ww.....ww...",
+ "T.4..w.f.www....",
+ "Tw....wwww.....P",
+ "TwwRZR....ww.,wT",
+ "Tw.RcR..w..1.wwT",
+ "TTwRRR.ww...wwTT",
+ "TTTTTTTTTTTTTTTT"],
+ npcs:['ortica']});
+
+// ---------- DUNGEON 1: TANA DEL FUNGO ----------
+defRoom('d1:1,2',{name:'Tana del Fungo',music:'dungeon',dark:0.55,
+ map:[
+ "#######__#######",
+ "#m_____VV_____m#",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "_______s________",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "#m_____E______m#",
+ "################"],
+ signs:["Le spore odiano il fuoco. Il fuoco odia l'umido. Tu, probabilmente, odierai entrambi."],
+ warps:[{to:'ow:0,1',x:7,y:2}]});
+defRoom('d1:0,2',{name:'Tana del Fungo',music:'dungeon',dark:0.97,open:'torches',
+ map:[
+ "#######JJ#######",
+ "#X____________X#",
+ "#__2___________#",
+ "#_____####_____#",
+ "#_____#f_#_____#",
+ "#_____#__#______",
+ "#_____##_#_____#",
+ "#___________2__#",
+ "#______________#",
+ "#X____________X#",
+ "################"]});
+defRoom('d1:0,1',{name:'Tana del Fungo',music:'dungeon',dark:0.6,
+ map:[
+ "################",
+ "#______________#",
+ "#__4________4__#",
+ "#______________#",
+ "#____GGGGGG____#",
+ "#____G_C__G____#",
+ "#____G____G____#",
+ "#____GG__GG____#",
+ "#______________#",
+ "#__1________1__#",
+ "#######__#######"],
+ chests:[{key:1}]});
+defRoom('d1:2,2',{name:'Tana del Fungo',music:'dungeon',dark:0.55,open:'enemies',
+ map:[
+ "#######JJ#######",
+ "#______________#",
+ "#__1_______1___#",
+ "#____m____m____#",
+ "#______________#",
+ "_______1_______#",
+ "#______________#",
+ "#____m____m____#",
+ "#__1________1__#",
+ "#______________#",
+ "################"]});
+defRoom('d1:2,1',{name:'Tana del Fungo',music:'dungeon',dark:0.5,open:'plate',
+ map:[
+ "################",
+ "#_____#__#_____#",
+ "#_____#C_#_____#",
+ "#_____#JJ#_____#",
+ "#______________#",
+ "#__m________m__#",
+ "#______________#",
+ "#__p__Q________#",
+ "#___________j__#",
+ "#______________#",
+ "#######__#######"],
+ chests:[{item:'lanterna'}]});
+defRoom('d1:1,1',{name:'Tana del Fungo',music:'dungeon',dark:0.6,
+ map:[
+ "#######DD#######",
+ "#______________#",
+ "#_GGG______GGG_#",
+ "#_GGG______GGG_#",
+ "#______________#",
+ "#____GG__GG____#",
+ "#____GG__GG____#",
+ "#_2__________2_#",
+ "#_____f________#",
+ "#______________#",
+ "#######__#######"]});
+defRoom('d1:1,0',{name:'Covo della Madre Muffa',music:'boss',dark:0.5,boss:'muffa',
+ map:[
+ "################",
+ "#m____________m#",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "#m____________m#",
+ "#######__#######"],
+ exit:{to:'ow:0,1',x:7,y:2}});
+
+// ---------- DUNGEON 2: FARO SOMMERSO ----------
+defRoom('d2:1,3',{name:'Faro Sommerso',music:'water',dark:0.35,
+ map:[
+ "#######__#######",
+ "#WW__________WW#",
+ "#W____________W#",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "#______s_______#",
+ "#______________#",
+ "#W____________W#",
+ "#WW____E_____WW#",
+ "################"],
+ signs:["Diario del guardiano: «L'anguilla ama la luce. Quando la vedi brillare, afferrala.»"],
+ warps:[{to:'ow:3,3',x:12,y:4}]});
+defRoom('d2:1,2',{name:'Faro Sommerso',music:'water',dark:0.35,
+ map:[
+ "#######DD#######",
+ "#______________#",
+ "#_WW________WW_#",
+ "#_WW___5____WW_#",
+ "#______________#",
+ "________________",
+ "#______________#",
+ "#_WW________WW_#",
+ "#_WW____5___WW_#",
+ "#______________#",
+ "#######__#######"]});
+defRoom('d2:0,2',{name:'Faro Sommerso',music:'water',dark:0.35,open:'enemies',
+ map:[
+ "################",
+ "#______________#",
+ "#_###__________#",
+ "#_#_#____5_____#",
+ "#_#_#__________#",
+ "#_#CJ______5____",
+ "#_#_#__________#",
+ "#_###____5_____#",
+ "#______________#",
+ "#______________#",
+ "################"],
+ chests:[{item:'rampino'}]});
+defRoom('d2:2,2',{name:'Faro Sommerso',music:'water',dark:0.4,
+ map:[
+ "################",
+ "#_____GGGGG____#",
+ "#_____GGGGG_C__#",
+ "#__2__GGGGG____#",
+ "#_____GGGGG__2_#",
+ "____O_GGGGG_O__#",
+ "#_____GGGGG____#",
+ "#_____GGGGG____#",
+ "#_f___GGGGG____#",
+ "#_____GGGGG____#",
+ "################"],
+ chests:[{key:1}]});
+defRoom('d2:1,1',{name:'Faro Sommerso',music:'water',dark:0.4,
+ map:[
+ "#######__#######",
+ "#WW__________WW#",
+ "#W_____3______W#",
+ "#___##____##___#",
+ "#___#______#___#",
+ "#______________#",
+ "#___#______#___#",
+ "#___##_3__##___#",
+ "#W____________W#",
+ "#WW____f_____WW#",
+ "#######__#######"]});
+defRoom('d2:1,0',{name:"Vasca dell'Anguilla",music:'boss',dark:0.35,boss:'anguilla',
+ map:[
+ "################",
+ "#______________#",
+ "#__WWWWWWWWWW__#",
+ "#__WWWWWWWWWW__#",
+ "#__WWWWWWWWWW__#",
+ "#__WWWWWWWWWW__#",
+ "#__WWWWWWWWWW__#",
+ "#__WWWWWWWWWW__#",
+ "#______________#",
+ "#______________#",
+ "#######__#######"],
+ exit:{to:'ow:3,3',x:11,y:4}});
+
+// ---------- DUNGEON 3: CAMPANILE SPEZZATO ----------
+defRoom('d3:1,2',{name:'Campanile Spezzato',music:'tower',dark:0.3,
+ map:[
+ "#######DD#######",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "#_____________##",
+ "______________Z_",
+ "#_____________##",
+ "#__Y________Y__#",
+ "#______________#",
+ "#______E_______#",
+ "################"],
+ warps:[{to:'ow:2,0',x:7,y:4}]});
+defRoom('d3:0,2',{name:'Campanile Spezzato',music:'tower',dark:0.3,open:'plate',
+ map:[
+ "#######JJ#######",
+ "#______________#",
+ "#__p________p__#",
+ "#______________#",
+ "#___Q______Q___#",
+ "#_______________",
+ "#______________#",
+ "#_______3______#",
+ "#______________#",
+ "#______________#",
+ "################"]});
+defRoom('d3:0,1',{name:'Campanile Spezzato',music:'tower',dark:0.3,
+ map:[
+ "################",
+ "#______________#",
+ "#___Y______Y___#",
+ "#______________#",
+ "#______C_______#",
+ "#______________#",
+ "#___Y______Y___#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#######__#######"],
+ chests:[{item:'campana'}]});
+defRoom('d3:2,2',{name:'Campanile Spezzato',music:'tower',dark:0.3,
+ map:[
+ "################",
+ "#_______]______#",
+ "#_______]____C_#",
+ "#_______]______#",
+ "#[[[[[[[#______#",
+ "________#______#",
+ "#_______#______#",
+ "#__7____#______#",
+ "#_______#__f___#",
+ "#_______#______#",
+ "################"],
+ chests:[{key:1}]});
+defRoom('d3:1,1',{name:'Campanile Spezzato',music:'tower',dark:0.3,
+ map:[
+ "#######__#######",
+ "#______________#",
+ "#_[[______]]___#",
+ "#______7_______#",
+ "#______________#",
+ "#__________###_#",
+ "#__7_______Zj#_#",
+ "#__________###_#",
+ "#_]]_______[[__#",
+ "#______________#",
+ "#######__#######"]});
+defRoom('d3:1,0',{name:"Cella del Gufo d'Ottone",music:'boss',dark:0.3,boss:'gufo',
+ map:[
+ "################",
+ "#______________#",
+ "#______________#",
+ "#__Z________Z__#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#__Z________Z__#",
+ "#______________#",
+ "#______________#",
+ "#######__#######"],
+ exit:{to:'ow:2,0',x:7,y:5}});
+
+// ---------- NIDO DELLA FALENA ----------
+defRoom('fn:0,1',{name:'Nido della Falena',music:'dark',dark:0.7,
+ map:[
+ "#######__#######",
+ "#_O____ZZ______#",
+ "#______________#",
+ "#GGGGGGGGGGGGGG#",
+ "#GGGGGGGGGGGGGG#",
+ "#GGGGGGGGGGGGGG#",
+ "#_6__________6_#",
+ "#VVVVVVVVVVVOVV#",
+ "#______________#",
+ "#______E_______#",
+ "################"],
+ warps:[{to:'ow:3,0',x:7,y:2}]});
+defRoom('fn:0,0',{name:'Cuore del Nido',music:'final',dark:0.6,boss:'falena',
+ map:[
+ "################",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "#######__#######"]});
+
+// ===================== TESTI =====================
+const PAGES = [
+ "Oggi è arrivato un bambino senza nome, con gli occhi grandi come lanterne. Lo chiamerò Cenerale, perché dorme sempre vicino alla cenere del camino.",
+ "Cenerale ha paura del buio. Ogni sera mi chiede: «E se la Lanterna si spegne?». Gli ho insegnato ad accendere le torce. Impara in fretta. Troppo in fretta.",
+ "Le tre Fiamme — del Bosco, del Mare e del Vento — tengono viva la Grande Lanterna. Lui le guarda come si guarda un tesoro.",
+ "Cenerale vuole portare la Lanterna dentro casa. «Così sarà solo nostra e non si spegnerà mai.» Gli ho detto che la luce chiusa in una stanza muore.",
+ "Se n'è andato. Ha lasciato le scarpe vicino al camino e, sul davanzale, una polvere grigia. Come ali di falena.",
+ "Se un giorno tornerà, e si sarà preso la luce, non odiatelo. Ha solo paura del buio, come tutti. Ilio, se leggi queste righe: riportalo a casa."
+];
+// pagine raccolte: id -> indice
+const PAGE_SRC = {'tito':0,'ow:3,1':1,'ow:1,0':2,'frogs':3,'d1:2,1':4,'d3:1,1':5};
+
+const ITEMS = {
+ pertica:{name:'Pertica del Lampionaio',desc:'Lunga, robusta, profuma di fumo. Tieni premuto A e rilascia per un fendente rotante.'},
+ lanterna:{name:'Lanterna di Orsola',desc:'Lancia una fiammata: brucia i rovi, accende le torce, illumina gli spettri.'},
+ rampino:{name:'Rampino del Guardiano',desc:'Si aggancia ai pali e ti tira oltre i baratri. Stordisce i nemici e afferra gli oggetti.'},
+ campana:{name:'Campana di Vetro',desc:'Il suo rintocco frantuma le pareti incrinate, stordisce i nemici e scambia i cristalli.'}
+};
+
+const TROPHIES = [
+ ['primo','Primo passo','Hai iniziato il viaggio.'],
+ ['giardiniere','Giardiniere furioso','Taglia 40 cespugli.'],
+ ['rane','Direttore del coro','Fai cantare le rane nel giusto ordine.'],
+ ['gatto','Amico dei gatti','Parla con Bricco finché non cede.'],
+ ['konami','Codice antico','Ricorda la sequenza sussurrata.'],
+ ['becchino','Becchino curioso','Leggi tutte le lapidi del cimitero.'],
+ ['accendi','Accendilume','Accendi 12 torce.'],
+ ['caduta','Gravità: 1, Ilio: 0','Cadi nel vuoto 8 volte.'],
+ ['turbine','Turbine di brace','Esegui 25 fendenti rotanti.'],
+ ['pip','Pip logorroico','Chiedi consiglio a Pip 15 volte.'],
+ ['ricco','Ricco sfondato','Possiedi 250 conchiglie.'],
+ ['intatto','Senza un graffio','Sconfiggi un boss senza subire danni.'],
+ ['biblio','Archivista','Trova tutte le 6 pagine del diario.'],
+ ['lucciole','Custode delle lucciole','Ritrova tutte le 24 lucciole.'],
+ ['fine','La notte è finita','Completa il gioco.'],
+ ['cuore','Cuore intero','Ricomponi un cuore con 4 frammenti.']
+];
+const TOTAL_FIREFLIES = 24;
