@@ -79,7 +79,7 @@ function pipHint(){
  if(S.pieces<4) extra.push('I Frammenti di Cuore sono spesso su isolotti o dietro pareti incrinate. Ciottolo ne vende uno.');
  if(!S.trophies.gatto) extra.push('Bricco, il gatto del villaggio, sembra sempre sul punto di dire qualcosa. Forse basta insistere.');
  if(!S.flags.frogs) extra.push('Al Prato delle Rane c\'è un cartello con una canzone. Le rane rispondono alla pertica...');
- const lines=['Pip: '+h]; if(extra.length&&Math.random()<0.8) lines.push('Pip: '+pick(extra));
+ const lines=['Pip: Il nostro obiettivo: '+curObjective().t+'.','Pip: '+h]; if(extra.length&&Math.random()<0.8) lines.push('Pip: '+pick(extra));
  return lines;
 }
 const PIP_IDLE=['Che bel posto per una lucciola!','Ilio, hai mai pensato di tagliare TUTTI i cespugli? Così, per scienza.','Ho freddo alle ali. Scherzo, sono una lucciola: sono sempre accesa.','Lo sapevi che le falene sono attratte dalla luce? Brrr.','Se ti perdi, premi ✦ e chiedi a me!','Le lapidi del cimitero dicono cose buffe. Lo so, le ho lette tutte. Due volte.'];

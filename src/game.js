@@ -212,6 +212,7 @@ function update(dt){
  if(IN.mP){ if(mode==='play') openMenu(); else if(menuOpen) closeMenu(); else if(shopOpen) closeShop(); }
  if(IN.tpClick||IN.pP){ IN.tpClick=0; if(mode==='play') say(pipHint()); }
  if(mode==='title'||mode==='menu'||mode==='shop') return;
+ updateGuide();
  if(mode==='dialog'){ updateDialog(dt); updateFx(dt); return; }
  if(mode==='trans'){ trans.t+=dt; if(trans.t>=0.5){ trans=null; mode='play'; } return; }
  if(mode==='warp'){ updateWarp(dt); return; }

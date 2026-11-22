@@ -17,6 +17,7 @@ function render(){
  renderHUD(ctx);
  paperOverlay(ctx);
  if(bossRef&&!bossRef.dead) renderBossBar(ctx);
+ drawObjectiveBar(ctx);
  if(banner) renderBanner(ctx);
  if(toastQ.length) renderToast(ctx);
  if(mode==='dialog'&&dlg&&dlg.cur) renderDialog(ctx);
@@ -53,6 +54,7 @@ function renderWorld(g){
  // pip
  if(pip) drawFirefly(g,pip.x,pip.y,1.1,T,S.konami);
  renderLight(g);
+ drawGuideWorld(g);
  // testi fluttuanti
  g.textAlign='center'; g.font=`600 13px ${FONT}`;
  for(const f of floaters){ g.globalAlpha=Math.min(1,f.life*1.5); g.lineWidth=3; g.strokeStyle='rgba(20,10,30,.85)'; g.strokeText(f.text,clamp(f.x,90,VW-90),f.y); g.fillStyle=f.col; g.fillText(f.text,clamp(f.x,90,VW-90),f.y); }
