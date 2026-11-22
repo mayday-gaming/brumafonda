@@ -6,7 +6,7 @@ Ilio, a young apprentice lamplighter, and Pip, a very talkative firefly, set out
 
 ## Play
 
-**[Play online](https://mayday-gaming.github.io/Brumafonda/)**, or open `index.html` in any modern browser. Desktop and mobile (touch controls) are supported. Progress is saved automatically in `localStorage`.
+**[Play online](https://mayday-gaming.github.io/brumafonda/)**, or open `index.html` in any modern browser. Desktop and mobile (touch controls) are supported. Progress is saved automatically in `localStorage`.
 
 | Action | Keyboard | Touch |
 |---|---|---|
