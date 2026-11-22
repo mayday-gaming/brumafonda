@@ -5,8 +5,8 @@ const FONT='Fredoka, "Trebuchet MS", sans-serif';
 function render(){
  ctx.setTransform(K,0,0,K,0,0); ctx.imageSmoothingEnabled=true;
  ctx.fillStyle='#0d0a14'; ctx.fillRect(0,0,GW,GH);
- if(mode==='title'){ renderTitle(ctx); return; }
- if(mode==='ending'){ renderEnding(ctx); return; }
+ if(mode==='title'){ renderTitle(ctx); paperOverlay(ctx); return; }
+ if(mode==='ending'){ renderEnding(ctx); paperOverlay(ctx); return; }
  if(!room||!P) return;
  ctx.save(); ctx.beginPath(); ctx.rect(0,HUD,VW,VH); ctx.clip();
  if(mode==='trans'&&trans){ const k=easeInOut(Math.min(1,trans.t/0.5));
@@ -15,6 +15,7 @@ function render(){
  else { const sx=shake?rand(-shake,shake)*0.6:0, sy=shake?rand(-shake,shake)*0.6:0; ctx.translate(sx,HUD+sy); renderWorld(ctx); }
  ctx.restore();
  renderHUD(ctx);
+ paperOverlay(ctx);
  if(bossRef&&!bossRef.dead) renderBossBar(ctx);
  if(banner) renderBanner(ctx);
  if(toastQ.length) renderToast(ctx);
@@ -26,18 +27,23 @@ function render(){
 function renderWorld(g){
  if(room.dirty||!room.cache) buildCache();
  g.drawImage(room.cache,0,0,VW,VH);
+ collectShadowLights();
  drawDynTiles(g);
+ drawFoliage(g);
  // particelle a terra
  for(const p of parts) if(p.type==='ripple'){ const k=1-p.life/p.max; g.strokeStyle=`rgba(220,250,255,${0.6*(1-k)})`; g.lineWidth=1.2; ell(g,p.x,p.y,4+k*10,2+k*4); g.stroke(); }
  // entità ordinate per y
- const list=ents.map(e=>({y:e.y,e})); list.push({y:P.y,hero:1});
+ const list=ents.map(e=>({y:e.y,e})); list.push({y:P.y,hero:1}); for(const t of room.trees||[]) list.push({y:t[1]*TS+26,tree:t});
  list.sort((a,b)=>a.y-b.y);
- for(const it of list){ if(it.hero) drawHero(g); else { const e=it.e, d=EDEF[e.kind]; if(!d.draw) continue;
+ for(const it of list){ if(it.tree){ drawCanopy(g,it.tree[0],it.tree[1]); continue; } if(it.hero) drawHero(g); else { const e=it.e, d=EDEF[e.kind]; if(!d.draw) continue;
    if(e.inv>0&&Math.sin(T*50)>0&&e.enemy){ g.globalAlpha=0.5; }
-   if(e.enemy&&!d.fly&&e.kind!=='velo'&&!e.boss){ g.fillStyle='rgba(0,0,0,.25)'; ell(g,e.x,e.y,e.r*0.9,e.r*0.35); g.fill(); }
+   if(e.enemy&&!d.fly&&e.kind!=='velo'&&!e.boss&&!(e.kind==='anguilla')){ drawSoftShadow(g,e.x,e.y,e.r*0.9,e.r*0.35,e.r*2.2); }
+   if(e.enemy){ g.save(); const br=Math.sin(e.t*3.2)*(e.stun>0?0.01:0.045); g.translate(e.x,e.y); g.scale(1+br*0.6,1-br); g.translate(-e.x,-e.y); }
    if(e.stun>0&&e.enemy&&e.kind!=='guardia'&&!e.boss){ g.save(); g.translate(rand(-0.8,0.8),0); d.draw.call(d,g,e); g.restore(); for(let i=0;i<2;i++){ const a=T*6+i*3; g.fillStyle='#fff3a0'; circ(g,e.x+Math.cos(a)*9,e.y-26-(e.z||0)+Math.sin(a)*3,1.8); g.fill(); } }
    else d.draw.call(d,g,e);
+   if(e.enemy) g.restore();
    g.globalAlpha=1; } }
+ drawClouds(g);
  // proiettili
  for(const p of projs) drawProj(g,p);
  // anelli della campana
@@ -70,7 +76,10 @@ function drawHero(g){
  if(swinging&&P.face==='u'){ const p=easeOut(1-P.swing/0.24); pole(base-1.5+p*3,28,1); }
  if(P.hook){ const h=P.hook, hx=P.x+P.fx*6, hy=P.y-14; g.strokeStyle='#9aa0a8'; g.lineWidth=1.5; g.setLineDash([3,2]); g.beginPath(); g.moveTo(hx,hy); g.lineTo(h.x,h.y); g.stroke(); g.setLineDash([]);
    g.save(); g.translate(h.x,h.y); g.rotate(Math.atan2(h.dy,h.dx)); g.strokeStyle='#e0e4ea'; g.lineWidth=2.5; g.beginPath(); g.moveTo(-4,0); g.lineTo(4,0); g.moveTo(4,0); g.lineTo(0,-5); g.moveTo(4,0); g.lineTo(0,5); g.stroke(); g.restore(); }
+ P.sqk=(P.sqk||0)*0.86; if(P.moving!==P.wasMoving){ P.sqk+=P.moving?0.06:-0.05; P.wasMoving=P.moving; }
+ g.save(); g.translate(P.x,P.y); g.rotate(clamp(P.vx/122,-1,1)*0.06); g.scale(1+P.sqk,1-P.sqk); g.translate(-P.x,-P.y);
  drawPerson(g,P.x,P.y,HERO,P.face,T,P.moving,P.walk);
+ g.restore();
  if(idle&&P.face==='u') back();
  if(swinging&&P.face!=='u'){ const p=easeOut(1-P.swing/0.24); const a0=base-1.5, a=a0+p*3;
    g.strokeStyle='rgba(255,250,220,.55)'; g.lineWidth=7; g.beginPath(); g.ellipse(P.x+P.fx*3,P.y-17,30,25.5,0,a0+p*1.2,a); g.stroke(); g.strokeStyle='rgba(255,255,255,.9)'; g.lineWidth=2; g.beginPath(); g.ellipse(P.x+P.fx*3,P.y-17,30,25.5,0,Math.max(a0,a-0.6),a); g.stroke();
@@ -99,6 +108,7 @@ function drawPart(g,p){
   case 'leaf': g.save(); g.translate(p.x,p.y); g.rotate(p.life*8); g.fillStyle=p.col; g.globalAlpha=a; g.beginPath(); g.ellipse(0,0,p.size,p.size*0.5,0,0,6.28); g.fill(); g.restore(); g.globalAlpha=1; break;
   case 'petal': g.save(); g.translate(p.x+Math.sin(p.life*2)*8,p.y); g.rotate(p.life*3); g.fillStyle=p.col; g.globalAlpha=Math.min(1,p.life); g.beginPath(); g.ellipse(0,0,p.size,p.size*0.55,0,0,6.28); g.fill(); g.restore(); g.globalAlpha=1; break;
   case 'glass': g.save(); g.translate(p.x,p.y); g.rotate(p.life*10); g.fillStyle=p.col; g.globalAlpha=a; g.beginPath(); g.moveTo(0,-p.size); g.lineTo(p.size*0.8,p.size*0.6); g.lineTo(-p.size*0.6,p.size*0.4); g.fill(); g.restore(); g.globalAlpha=1; break;
+  case 'splat': { const r=p.size*(1.8-a*0.8); const gr=g.createRadialGradient(p.x,p.y,0,p.x,p.y,r); gr.addColorStop(0,p.col); gr.addColorStop(0.75,p.col); gr.addColorStop(1,'rgba(0,0,0,0)'); g.globalAlpha=a*0.35; g.fillStyle=gr; circ(g,p.x,p.y,r); g.fill(); g.globalAlpha=a*0.25; g.strokeStyle=p.col; g.lineWidth=1.5; circ(g,p.x,p.y,r*0.92); g.stroke(); g.globalAlpha=1; break; }
   case 'smoke': g.fillStyle=p.col; g.globalAlpha=a*0.6; circ(g,p.x,p.y,p.size*(1.6-a*0.6)); g.fill(); g.globalAlpha=1; break;
   case 'bubble': g.strokeStyle=p.col; g.lineWidth=1; g.globalAlpha=Math.min(1,p.life); circ(g,p.x+Math.sin(p.life*5)*2,p.y,p.size); g.stroke(); g.globalAlpha=1; break;
   case 'note': g.fillStyle=p.col; g.globalAlpha=a; g.font=`700 ${p.size+6}px ${FONT}`; g.textAlign='center'; g.fillText('♪',p.x+Math.sin(p.life*6)*4,p.y); g.globalAlpha=1; break;
