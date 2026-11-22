@@ -6,7 +6,7 @@ Ilio, a young apprentice lamplighter, and Pip, a very talkative firefly, set out
 
 ## Play
 
-Open `index.html` in any modern browser. Desktop and mobile (touch controls) are supported. Progress is saved automatically in `localStorage`.
+**[Play online](https://mayday-gaming.github.io/Brumafonda/)**, or open `index.html` in any modern browser. Desktop and mobile (touch controls) are supported. Progress is saved automatically in `localStorage`.
 
 | Action | Keyboard | Touch |
 |---|---|---|
@@ -34,6 +34,8 @@ Sources live in `src/` and are bundled into a single `index.html`:
 ./build.sh                 # bundle + syntax check
 node tools/validate.js     # check room sizes and edge connectivity
 ```
+
+Every push to `main` rebuilds the game and publishes it to the `gh-pages` branch (see `.github/workflows/pages.yml`).
 
 | File | Contents |
 |---|---|
