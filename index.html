@@ -114,7 +114,7 @@ table.keys td{border-bottom:1px solid rgba(238,241,255,.2)!important}table.keys 
 </div>
 <div id="confirm" class="ov hidden"><div class="panel"><b>Iniziare una nuova avventura?</b><span style="color:#cdbfe0;font-size:14px">Il salvataggio attuale verrà cancellato.</span><div class="row" style="justify-content:center"><button class="btn" id="cNo">Annulla</button><button class="btn main" id="cYes">Ricomincia</button></div></div></div>
 <div id="menu" class="ov hidden"><div class="panel"><div class="ph"><h3>Zaino di Ilio</h3><button class="btn" id="menuClose">Chiudi</button></div>
- <div id="tabs"><button data-t="zaino">Zaino</button><button data-t="mappa">Mappa</button><button data-t="collezione">Collezione</button><button data-t="diario">Diario</button><button data-t="trofei">Trofei</button><button data-t="opzioni">Opzioni</button></div>
+ <div id="tabs"><button data-t="missione">Missione</button><button data-t="zaino">Zaino</button><button data-t="mappa">Mappa</button><button data-t="collezione">Collezione</button><button data-t="diario">Diario</button><button data-t="trofei">Trofei</button><button data-t="opzioni">Opzioni</button></div>
  <div class="pb" id="menuBody"></div></div></div>
 <div id="shop" class="ov hidden"><div class="panel"><div class="ph"><h3>Bottega di Ciottolo</h3><button class="btn" id="shopClose">Arrivederci</button></div><div class="pb" id="shopBody"></div></div></div>
 <script>
@@ -1850,7 +1850,7 @@ function pipHint(){
  if(S.pieces<4) extra.push('I Frammenti di Cuore sono spesso su isolotti o dietro pareti incrinate. Ciottolo ne vende uno.');
  if(!S.trophies.gatto) extra.push('Bricco, il gatto del villaggio, sembra sempre sul punto di dire qualcosa. Forse basta insistere.');
  if(!S.flags.frogs) extra.push('Al Prato delle Rane c\'è un cartello con una canzone. Le rane rispondono alla pertica...');
- const lines=['Pip: '+h]; if(extra.length&&Math.random()<0.8) lines.push('Pip: '+pick(extra));
+ const lines=['Pip: Il nostro obiettivo: '+curObjective().t+'.','Pip: '+h]; if(extra.length&&Math.random()<0.8) lines.push('Pip: '+pick(extra));
  return lines;
 }
 const PIP_IDLE=['Che bel posto per una lucciola!','Ilio, hai mai pensato di tagliare TUTTI i cespugli? Così, per scienza.','Ho freddo alle ali. Scherzo, sono una lucciola: sono sempre accesa.','Lo sapevi che le falene sono attratte dalla luce? Brrr.','Se ti perdi, premi ✦ e chiedi a me!','Le lapidi del cimitero dicono cose buffe. Lo so, le ho lette tutte. Due volte.'];
@@ -1862,6 +1862,87 @@ const SHOP=[
  {id:'barattolo',name:'Lucciola in barattolo',desc:'«L\'ho trovata nel mio guscio. Non chiedere.»',price:45,once:1,buy:()=>{ closeShop(); gainFirefly(); }},
  {id:'bussola',name:'Bussola delle Lucciole',desc:'Mostra sulla mappa le stanze con lucciole ancora da trovare.',price:40,once:1,buy:()=>{ S.flags.bussola=1; }}
 ];
+// ===================== GUIDA: OBIETTIVI, FRECCIA, DIARIO DELLE MISSIONI =====================
+const QUESTS=[
+ {id:'intro', t:'Parla con Nonna Orsola', done:()=>S.flags.intro},
+ {id:'lanterna', t:'Trova la Lanterna nella Tana del Fungo', done:()=>S.items.lanterna},
+ {id:'flame0', t:'Sconfiggi la Madre Muffa: Fiamma del Bosco', done:()=>S.flags.flame0},
+ {id:'rampino', t:'Trova il Rampino nel Faro Sommerso', done:()=>S.items.rampino},
+ {id:'flame1', t:'Sconfiggi l\'Anguilla di Rame: Fiamma del Mare', done:()=>S.flags.flame1},
+ {id:'campana', t:'Trova la Campana di Vetro nel Campanile', done:()=>S.items.campana},
+ {id:'flame2', t:'Sconfiggi il Gufo d\'Ottone: Fiamma del Vento', done:()=>S.flags.flame2},
+ {id:'done', t:'Affronta Cenerale nel Nido della Falena', done:()=>S.flags.done}
+];
+function curObjective(){
+ const it=S.items, f=S.flags, w=room?room.w:'ow';
+ if(!f.intro) return {t:'Parla con Nonna Orsola, la signora vestita di viola',room:'ow:1,2',tile:[3,3]};
+ if(!f.flame0){
+  if(w==='d1') return {t:!it.lanterna?'Tana del Fungo: sconfiggi i Muffoli nella stanza a est, poi prosegui a nord':'Tana del Fungo: accendi le 4 torce nella stanza buia a ovest, prendi la chiave e brucia i rovi a nord'};
+  return it.lanterna?{t:'Torna nella Tana del Fungo e sconfiggi la Madre Muffa',room:'ow:0,1',tile:[7,1]}:{t:'Raggiungi la Tana del Fungo, nel Bosco Muschiato a nord-ovest',room:'ow:0,1',tile:[7,1]};
+ }
+ if(!f.flame1){
+  if(w==='d2') return {t:!it.rampino?'Faro Sommerso: sconfiggi i granchi nella stanza a ovest':'Faro Sommerso: col rampino prendi la chiave a est, poi sali a nord dall\'Anguilla'};
+  return it.rampino?{t:'Torna nel Faro Sommerso e sconfiggi l\'Anguilla di Rame',room:'ow:3,3',tile:[13,4]}:{t:'Brucia i rovi con la lanterna (tasto B) e raggiungi il Faro Sommerso a sud-est',room:'ow:3,3',tile:[13,4]};
+ }
+ if(!f.flame2){
+  if(w==='d3') return {t:!it.campana?'Campanile: spingi i due blocchi sulle piastre nella stanza a ovest':'Campanile: suona la campana per rompere la parete a est e scambiare i cristalli, poi sali'};
+  return it.campana?{t:'Torna nel Campanile e sconfiggi il Gufo d\'Ottone',room:'ow:2,0',tile:[7,3]}:{t:'Attraversa l\'Abisso del Vento col rampino e accendi le due torce del Campanile',room:'ow:2,0',tile:[7,3]};
+ }
+ if(!f.done){
+  if(w==='fn') return {t:'Nido della Falena: brucia i rovi, aggrappati al palo e rompi la parete con la campana'};
+  return {t:'Entra nel Nido della Falena, a est del Campanile',room:'ow:3,0',tile:[7,1]};
+ }
+ if(S.fireflies<TOTAL_FIREFLIES) return {t:`Ritrova le lucciole mancanti (${S.fireflies}/${TOTAL_FIREFLIES}) per il finale vero`};
+ return {t:'Hai completato tutto. Grazie per aver giocato!'};
+}
+// grafo delle stanze del mondo esterno (bordi percorribili)
+const EDGE_WALK=c=>!'THRWBVFL#XYZQCsgOlmM[]KuG'.includes(c);
+function roomStep(from,to){
+ if(from===to) return null;
+ const q=[from], prev={[from]:null};
+ while(q.length){ const k=q.shift(); if(k===to) break; const [w,xy]=k.split(':'); const [x,y]=xy.split(',').map(Number); const m=ROOMS[k].map;
+  const tryN=(dx,dy,ok)=>{ const n=w+':'+(x+dx)+','+(y+dy); if(ROOMS[n]&&ok&&!(n in prev)){ prev[n]=k; q.push(n); } };
+  tryN(-1,0,m.some(r=>EDGE_WALK(r[0]))); tryN(1,0,m.some(r=>EDGE_WALK(r[15]))); tryN(0,-1,[...m[0]].some(EDGE_WALK)); tryN(0,1,[...m[10]].some(EDGE_WALK)); }
+ if(!(to in prev)) return null;
+ let k=to; while(prev[k]!==from) k=prev[k];
+ const a=from.split(':')[1].split(',').map(Number), b=k.split(':')[1].split(',').map(Number); return [b[0]-a[0],b[1]-a[1]];
+}
+let guideSt={text:'',changed:0,lastHint:0};
+function updateGuide(){
+ if(!S||mode==='title') return;
+ const o=curObjective();
+ if(o.t!==guideSt.text){ const first=!guideSt.text; guideSt.text=o.t; guideSt.changed=T; guideSt.lastHint=T; guideSt.flash=first?0:3; if(!first){ AU.sfx('menu'); toast('★ Nuovo obiettivo'); } }
+ if(mode==='play'&&!S.flags.noGuide&&T-guideSt.changed>140&&T-guideSt.lastHint>140&&!pipMsg){ guideSt.lastHint=T; pipSay('Ehi Ilio! '+o.t+'. Se serve, premi ✦ e ti spiego meglio.'); }
+}
+function drawGuideWorld(g){
+ if(S.flags.noGuide||mode!=='play'&&mode!=='dialog') return;
+ const o=curObjective(); if(!o.room) return;
+ if(o.room===room.key&&o.tile){ const [tx,ty]=o.tile; const npc=ents.find(e=>e.kind==='npc'&&Math.floor(e.x/TS)===tx&&Math.floor((e.y-6)/TS)===ty);
+  const x=tx*TS+16, y=(npc?npc.y-76:ty*TS-6)+Math.sin(T*4)*3; const pulse=1+Math.sin(T*6)*0.08;
+  g.save(); g.translate(x,y); g.scale(pulse,pulse); g.fillStyle='rgba(255,224,138,.25)'; circ(g,0,0,13); g.fill();
+  g.fillStyle='#ffe08a'; g.strokeStyle='#5a3a10'; g.lineWidth=1.5; g.beginPath(); g.moveTo(-7,-6); g.lineTo(7,-6); g.lineTo(0,5); g.closePath(); g.fill(); g.stroke(); g.restore(); return; }
+ if(room.w!=='ow') return;
+ const st=roomStep(room.key,o.room); if(!st) return;
+ const [dx,dy]=st, m=room.def.map; let cells=[];
+ if(dx) { const col=dx>0?15:0; for(let y=0;y<11;y++) if(EDGE_WALK(m[y][col])) cells.push(y); }
+ else { const row=dy>0?10:0; for(let x=0;x<16;x++) if(EDGE_WALK(m[row][x])) cells.push(x); }
+ if(!cells.length) return; const mid=(cells[0]+cells[cells.length-1])/2*TS+16;
+ const b=Math.sin(T*5)*4; let x,y; if(dx){ x=dx>0?VW-16+b*0.5:16-b*0.5; y=mid; } else { x=mid; y=dy>0?VH-14+b*0.5:16-b*0.5; }
+ const a=Math.atan2(dy,dx);
+ g.save(); g.translate(x,y); g.rotate(a); g.globalAlpha=0.85+Math.sin(T*5)*0.15;
+ const gr=g.createRadialGradient(0,0,0,0,0,20); gr.addColorStop(0,'rgba(255,230,150,.45)'); gr.addColorStop(1,'rgba(255,230,150,0)'); g.fillStyle=gr; circ(g,0,0,20); g.fill();
+ g.fillStyle='#ffe08a'; g.strokeStyle='#5a3a10'; g.lineWidth=2; g.beginPath(); g.moveTo(10,0); g.lineTo(-6,-9); g.lineTo(-2,0); g.lineTo(-6,9); g.closePath(); g.fill(); g.stroke(); g.restore(); g.globalAlpha=1;
+}
+function drawObjectiveBar(g){
+ if(S.flags.noGuide||(bossRef&&!bossRef.dead)||mode==='dialog') return;
+ const fs=Math.round(clamp(12/Math.min(1,CSS_S),12,16)); g.font=`600 ${fs}px ${FONT}`;
+ const lh=Math.round(fs*1.3), lines=wrap(g,guideSt.text,GW-70).slice(0,3);
+ const w=Math.max(...lines.map(l=>g.measureText(l).width))+44, h=lines.length*lh+12, x=8, y=GH-h-8;
+ const fl=guideSt.flash>0?(guideSt.flash-=1/60, 0.5+Math.abs(Math.sin(T*8))*0.5):0;
+ g.globalAlpha=0.92; ffWin(g,x,y,w,h,6); g.globalAlpha=1;
+ if(fl){ g.strokeStyle=`rgba(255,224,138,${fl})`; g.lineWidth=2.5; rr(g,x-1,y-1,w+2,h+2,7); g.stroke(); }
+ g.textAlign='left'; ffText(g,'★',x+11,y+6+lh*0.78,'#ffe08a'); lines.forEach((l,i)=>ffText(g,l,x+30,y+6+lh*0.78+i*lh,'#ffffff'));
+}
 // ===================== GIOCATORE =====================
 const HERO={skin:'#f6cfa4',hair:'#6b3a22',hairStyle:'spiky',body:'#2f9a86',collar:'#bfeee0',belt:'#6d4727',scarf:'#f08a3a',hat:'cap',hatc:'#2b5a4f',pants:'#4a3a30',boots:'#7a4a28'};
 
@@ -2076,6 +2157,7 @@ function update(dt){
  if(IN.mP){ if(mode==='play') openMenu(); else if(menuOpen) closeMenu(); else if(shopOpen) closeShop(); }
  if(IN.tpClick||IN.pP){ IN.tpClick=0; if(mode==='play') say(pipHint()); }
  if(mode==='title'||mode==='menu'||mode==='shop') return;
+ updateGuide();
  if(mode==='dialog'){ updateDialog(dt); updateFx(dt); return; }
  if(mode==='trans'){ trans.t+=dt; if(trans.t>=0.5){ trans=null; mode='play'; } return; }
  if(mode==='warp'){ updateWarp(dt); return; }
@@ -2181,6 +2263,7 @@ function render(){
  renderHUD(ctx);
  paperOverlay(ctx);
  if(bossRef&&!bossRef.dead) renderBossBar(ctx);
+ drawObjectiveBar(ctx);
  if(banner) renderBanner(ctx);
  if(toastQ.length) renderToast(ctx);
  if(mode==='dialog'&&dlg&&dlg.cur) renderDialog(ctx);
@@ -2217,6 +2300,7 @@ function renderWorld(g){
  // pip
  if(pip) drawFirefly(g,pip.x,pip.y,1.1,T,S.konami);
  renderLight(g);
+ drawGuideWorld(g);
  // testi fluttuanti
  g.textAlign='center'; g.font=`600 13px ${FONT}`;
  for(const f of floaters){ g.globalAlpha=Math.min(1,f.life*1.5); g.lineWidth=3; g.strokeStyle='rgba(20,10,30,.85)'; g.strokeText(f.text,clamp(f.x,90,VW-90),f.y); g.fillStyle=f.col; g.fillText(f.text,clamp(f.x,90,VW-90),f.y); }
@@ -2419,7 +2503,7 @@ function renderEnding(g){
 }
 // ===================== INTERFACCIA HTML =====================
 const $=id=>document.getElementById(id);
-let menuOpen=false, shopOpen=false, menuTab='zaino';
+let menuOpen=false, shopOpen=false, menuTab='missione';
 function showTitle(){ $('title').classList.remove('hidden'); mode='title'; AU.setMusic('title'); const s=loadSave(); $('btnCont').disabled=!s; $('btnCont').textContent=s?`Continua  ·  ${s.fireflies||0}/${TOTAL_FIREFLIES} lucciole`:'Continua'; }
 function startGame(cont){
  AU.init(); S=cont&&loadSave()||newState(); if(!S.stats.frogseq) S.stats.frogseq=[];
@@ -2431,7 +2515,9 @@ function startGame(cont){
   'Al centro del villaggio ardeva la Grande Lanterna, nutrita da tre Fiamme antiche: del Bosco, del Mare e del Vento.',
   'Finché, una notte, un\'ombra grigia con ali enormi scese dal cielo... e la Lanterna si spense.',
   'Ilio, giovane apprendista lampionaio, si sveglia di soprassalto.',
-  'Pip: Ilio! Ilio! Svegliati! La nonna ti cerca, è qui fuori! Quella con il vestito viola!']); }
+  'Pip: Ilio! Ilio! Svegliati! La nonna ti cerca, è qui fuori! Quella con il vestito viola!',
+  'Pip: Guarda in basso a sinistra: lì c\'è sempre il nostro obiettivo. Una freccia dorata ti indica la strada, e una stellina il punto esatto.',
+  'Pip: Muoviti con le frecce (o il joystick) e parla con A. Se ti perdi, premi ✦ o il tasto P: ti dico io cosa fare!']); }
  else if(cont) banner={text:room.def.name,t:2.4};
 }
 $('btnNew').addEventListener('click',()=>{ if(loadSave()){ $('confirm').classList.remove('hidden'); return; } startGame(false); });
@@ -2449,6 +2535,11 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 function renderMenu(){
  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===menuTab));
  const box=$('menuBody'); let h='';
+ if(menuTab==='missione'){
+  h+=`<h4>Obiettivo attuale</h4><div class="page" style="background:rgba(255,224,138,.15);color:#fff;font-family:Fredoka,sans-serif">★ ${esc(curObjective().t)}</div><h4>Diario delle missioni</h4>`;
+  let cur=false; for(const q of QUESTS){ const d=q.done(); const now=!d&&!cur; if(now) cur=true; h+=`<div class="pill ${d||now?'':'off'}" style="margin-bottom:6px;font-size:14px">${d?'✓':now?'▶':'○'} ${esc(now||d?q.t:'???')}</div>`; }
+  h+=`<p class="hint">Premi ✦ (o P) durante il gioco per un consiglio di Pip.</p>`;
+ }
  if(menuTab==='zaino'){
   h+='<div class="grid">'; for(const k of ['pertica','lanterna','rampino','campana']){ const has=S.items[k]; h+=`<div class="card ${has?'':'locked'} ${S.sel===k?'sel':''}" data-it="${k}"><img src="${has?iconCanvas(k):''}" alt=""><b>${has?esc(ITEMS[k].name):'???'}</b><span>${has?esc(ITEMS[k].desc):'Non ancora trovato.'}</span></div>`; } h+='</div>';
   const fn=['Fiamma del Bosco','Fiamma del Mare','Fiamma del Vento']; h+='<h4>Fiamme della Grande Lanterna</h4><div class="row">'; fn.forEach((n,i)=>{ h+=`<div class="pill ${S.flags['flame'+i]?'':'off'}">${S.flags['flame'+i]?'<img src="'+iconCanvas('flame'+i,28)+'">':''}${n}</div>`; }); h+='</div>';
@@ -2475,11 +2566,12 @@ function renderMenu(){
  if(menuTab==='trofei'){ h+='<div class="trophies">'; for(const [id,n,d] of TROPHIES){ const has=S.trophies[id]; h+=`<div class="tr ${has?'':'off'}"><b>${has?'🏆':'🔒'} ${esc(n)}</b><span>${esc(has?d:(id==='konami'||id==='gatto'?'???':d))}</span></div>`; } h+='</div>'; }
  if(menuTab==='opzioni'){
   h+=`<h4>Comandi</h4><table class="keys"><tr><td>Muoversi</td><td>Frecce / WASD · joystick</td></tr><tr><td>A · Pertica, parla, apri</td><td>Spazio / J / Z</td></tr><tr><td>Fendente rotante</td><td>Tieni premuto A e rilascia</td></tr><tr><td>B · Oggetto</td><td>K / X</td></tr><tr><td>Cambia oggetto</td><td>Q / L / C · ⟳</td></tr><tr><td>Chiedi a Pip</td><td>P / H · ✦</td></tr><tr><td>Menu</td><td>Esc / M · ☰</td></tr></table>`;
-  h+=`<div class="row"><button class="btn" id="optMute">${AU.muted?'Attiva audio':'Disattiva audio'}</button><button class="btn" id="optTitle">Torna al titolo</button></div><p class="hint">Il gioco si salva da solo a ogni cambio di stanza.</p>`;
+  h+=`<div class="row"><button class="btn" id="optMute">${AU.muted?'Attiva audio':'Disattiva audio'}</button><button class="btn" id="optGuide">${S.flags.noGuide?'Mostra guida':'Nascondi guida'}</button><button class="btn" id="optTitle">Torna al titolo</button></div><p class="hint">Il gioco si salva da solo a ogni cambio di stanza.</p>`;
  }
  box.innerHTML=h;
  box.querySelectorAll('[data-it]').forEach(el=>el.addEventListener('click',()=>{ const k=el.dataset.it; if(k!=='pertica'&&S.items[k]){ S.sel=k; renderMenu(); AU.sfx('menu'); } }));
  const om=$('optMute'); om&&om.addEventListener('click',()=>{ AU.setMute(!AU.muted); $('bMute').textContent=AU.muted?'♪̸':'♪'; renderMenu(); });
+ const og=$('optGuide'); og&&og.addEventListener('click',()=>{ S.flags.noGuide=!S.flags.noGuide; save(); renderMenu(); });
  const ot=$('optTitle'); ot&&ot.addEventListener('click',()=>{ save(); closeMenu(); showTitle(); });
 }
 
