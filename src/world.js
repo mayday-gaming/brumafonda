@@ -124,14 +124,14 @@ function updateRoomLogic(dt){
   let ok=false;
   if(def.open==='enemies') ok=!ents.some(e=>e.enemy&&!e.dead);
   if(def.open==='torches') ok=!room.grid.some(r=>r.includes('X'));
-  if(def.open==='plate') ok=room.plates.length>0&&room.plates.every(p=>blockAt(p.x,p.y)&&!blockAt(p.x,p.y).t);
+  if(def.open==='plate') ok=room.plates.length>0&&room.plates.every(p=>{ const b=blockAt(p.x,p.y); return b&&b.t<=0; });
   if(ok){ room.jOpen=true; S.got[room.key+'|clear']=1; AU.sfx('open'); shake=6; floatText(P.x,P.y-40,'Un passaggio si è aperto!','#ffe9a8'); save(); }
  }
  // bruciatura a catena dei rovi
  for(const b of room.burnQ){ b.t-=dt; if(b.t<=0) burnTile(b.x,b.y); }
  room.burnQ=room.burnQ.filter(b=>b.t>0);
  // blocchi in movimento
- for(const b of room.blocks){ if(b.t>0){ b.t-=dt; const k=Math.max(0,b.t/0.22); b.ox=b.dx*-TS*k; b.oy=b.dy*-TS*k; if(b.t<=0){b.ox=b.oy=0; if(room.plates.some(p=>p.x===b.x&&p.y===b.y)) AU.sfx('plate');} } }
+ for(const b of room.blocks){ if(b.t>0){ b.t-=dt; const k=Math.max(0,b.t/0.22); b.ox=b.dx*-TS*k; b.oy=b.dy*-TS*k; if(b.t<=0){b.t=0; b.ox=b.oy=0; if(room.plates.some(p=>p.x===b.x&&p.y===b.y)) AU.sfx('plate');} } }
 }
 function burnTile(x,y){
  if(tileAt(x,y)!=='V') return;
