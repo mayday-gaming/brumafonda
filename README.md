@@ -1,6 +1,6 @@
 # La Lanterna di Brumafonda
 
-A top-down action-adventure for the browser, in the spirit of classic 2D Zelda games, with an original story, world and characters. Everything (graphics, music, sound effects) is generated in code: no external assets.
+A top-down action-adventure for the browser, in the spirit of classic 2D Zelda games, with an original story, world and characters. Everything (graphics, music, sound effects) is generated in code: no external assets. The look is a hand-painted watercolor style: paper texture, bleeding washes, pigment edges, swaying grass and trees, drifting cloud shadows and breathing characters.
 
 Ilio, a young apprentice lamplighter, and Pip, a very talkative firefly, set out to recover the three Flames stolen from the Great Lantern of Brumafonda by Cenerale, the Moth King.
 
@@ -43,6 +43,7 @@ Every push to `main` rebuilds the game and publishes it to the `gh-pages` branch
 | `src/data.js` | Rooms, diary pages, items, trophies |
 | `src/core.js` | Constants, procedural audio and music, input, save |
 | `src/world.js` | Room loading, collisions, tile rendering |
+| `src/paint.js` | Watercolor post-processing, paper, foliage, shadows, clouds |
 | `src/entities.js` | Enemies, bosses, pickups, character renderer |
 | `src/npc.js` | NPC dialogue, Pip hints, shop |
 | `src/game.js` | Player, items, interactions, dialogue, update loop |
