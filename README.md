@@ -18,6 +18,10 @@ Ilio, a young apprentice lamplighter, and Pip, a very talkative firefly, set out
 | Ask Pip for a hint | P / H | ✦ |
 | Menu | Esc / M / Tab | ☰ |
 
+## Guidance
+
+The current objective is always shown at the bottom left, a golden arrow points to the screen exit leading to it, and a star marks the exact spot once you get there. The pause menu has a quest log, and Pip (✦ / P) gives contextual hints, or speaks up on his own if you seem stuck. The guide can be turned off in Options.
+
 ## Content
 
 - 15 overworld screens and 4 dungeons (Tana del Fungo, Faro Sommerso, Campanile Spezzato, Nido della Falena)
@@ -46,6 +50,7 @@ Every push to `main` rebuilds the game and publishes it to the `gh-pages` branch
 | `src/paint.js` | Watercolor post-processing, paper, foliage, shadows, clouds |
 | `src/entities.js` | Enemies, bosses, pickups, character renderer |
 | `src/npc.js` | NPC dialogue, Pip hints, shop |
+| `src/guide.js` | Objectives, path arrow, quest log |
 | `src/game.js` | Player, items, interactions, dialogue, update loop |
 | `src/render.js` | World rendering, lighting, HUD and windows |
 | `src/ui.js` | Title screen, pause menu, shop UI, main loop |
