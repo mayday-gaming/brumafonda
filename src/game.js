@@ -62,7 +62,7 @@ function updatePlayer(dt){
  for(const e of ents){ if(['shell','heart','firefly','piece','page','keyp','container','flame'].includes(e.kind)&&!e.dead&&dist(e.x,e.y-6,P.x,P.y-8)<e.r+10&&!(e.z>2)) collect(e);
   if(e.kind==='portal'&&dist(e.x,e.y,P.x,P.y)<16&&P.warpCd<=0){ warpTo(e.to.to,e.to.x,e.to.y); } }
 }
-function startSwing(){ P.swing=0.24; P.swingId++; AU.sfx('swing'); P.charge=0; }
+function startSwing(){ P.swing=0.24; P.swingId++; AU.sfx('swing'); P.charge=0; P.sqk=(P.sqk||0)-0.1; }
 function startSpin(){ P.spin=0.42; P.swingId++; AU.sfx('spin'); S.stats.spins++; if(S.stats.spins>=25) award('turbine'); P.charged=false; }
 function swordHits(cx,cy,r,type){
  const src={type,x:P.x,y:P.y-8,id:P.swingId};
@@ -134,7 +134,7 @@ function updateHook(dt){
   const a=Math.atan2(h.ty-P.y,h.tx-P.x), d=dist(P.x,P.y,h.tx,h.ty), s=Math.min(d,420*dt);
   P.x+=Math.cos(a)*s; P.y+=Math.sin(a)*s; P.vx=P.vy=0;
   if(Math.random()<0.5) addPart({x:P.x,y:P.y-10,vx:0,vy:0,life:0.3,col:'rgba(255,255,255,.5)',size:3,type:'spark'});
-  if(d<2){ P.x=h.tx; P.y=h.ty; P.hook=null; P.lastSafe={x:P.x,y:P.y}; }
+  if(d<2){ P.x=h.tx; P.y=h.ty; P.hook=null; P.lastSafe={x:P.x,y:P.y}; P.sqk=0.16; burst(P.x,P.y,['rgba(220,200,160,.8)'],6,50,3,'smoke'); }
  }
 }
 

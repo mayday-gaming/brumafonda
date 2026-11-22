@@ -24,7 +24,7 @@ function mkPlayer(x,y){ return {x,y,vx:0,vy:0,face:'d',fx:0,fy:1,walk:0,swing:0,
 // ---------- danni ----------
 function hurtPlayer(dmg,fx,fy){
  if(P.inv>0||mode!=='play'||P.falling>0) return;
- S.hp-=dmg; P.inv=1.1; P.dmgTaken=true; AU.sfx('hurt'); shake=7; hitstop=0.06;
+ S.hp-=dmg; P.inv=1.1; P.dmgTaken=true; P.sqk=0.18; AU.sfx('hurt'); shake=7; hitstop=0.06;
  const a=Math.atan2(P.y-fy,P.x-fx); P.kbx=Math.cos(a)*260; P.kby=Math.sin(a)*260;
  burst(P.x,P.y-12,['#ff6b6b','#ffd1d1'],10,120,3);
  if(S.hp<=0){ S.hp=0; mode='dead'; deadT=0; S.stats.deaths++; AU.sfx('fall'); }
@@ -35,7 +35,7 @@ function hitEnemy(e,dmg,src){
  if(d.onHit){ const r=d.onHit(e,dmg,src); if(r==='block'){ if(e.lastClang!==src.id){ e.lastClang=src.id; AU.sfx('clang'); burst((e.x+src.x)/2,(e.y+src.y)/2-10,['#fff','#ffe08a'],8,140,2,'spark'); if(src.type==='sword'||src.type==='spin'){ const a=Math.atan2(P.y-e.y,P.x-e.x); P.kbx=Math.cos(a)*170; P.kby=Math.sin(a)*170; } } return false; } if(r==='ignore') return false; if(typeof r==='number') dmg=r; }
  e.hp-=dmg; e.inv=d.invT||0.3; AU.sfx('hit'); hitstop=Math.max(hitstop,0.05); shake=Math.max(shake,e.boss?5:2);
  if(!e.boss&&!d.noKb){ const a=Math.atan2(e.y-src.y,e.x-src.x); e.kbx=Math.cos(a)*230; e.kby=Math.sin(a)*230; }
- burst(e.x,e.y-10-e.z,['#fff',d.col||'#ffd27a'],8,130,2.5);
+ burst(e.x,e.y-10-e.z,['#fff',d.col||'#ffd27a'],8,130,2.5); addPart({x:e.x,y:e.y-10-e.z,vx:0,vy:0,life:0.6,col:d.col||'#ffd27a',size:9,type:'splat'});
  if(e.hp<=0) killEnemy(e);
  return true;
 }
@@ -43,6 +43,7 @@ function killEnemy(e){
  const d=EDEF[e.kind]; e.dead=true; AU.sfx('kill'); S.stats.kills++;
  burst(e.x,e.y-10,[d.col||'#c8a0ff','#ffffff','#5b4a6b'],22,170,3.5);
  for(let i=0;i<8;i++) addPart({x:e.x+rand(-8,8),y:e.y-8,vx:rand(-20,20),vy:rand(-40,-10),life:1,col:'rgba(200,190,220,.5)',size:rand(5,9),type:'smoke'});
+ for(let i=0;i<4;i++) addPart({x:e.x+rand(-12,12),y:e.y-8+rand(-10,6),vx:0,vy:0,life:rand(0.8,1.3),col:d.col||'#c8a0ff',size:rand(7,13),type:'splat'});
  d.onDeath&&d.onDeath(e);
  if(!e.boss&&!d.noDrop){ const r=Math.random(); if(r<0.42) ents.push(mkEnt('shell',e.x,e.y,{val:Math.random()<0.15?5:1})); else if(r<0.62&&S.hp<S.maxhp) ents.push(mkEnt('heart',e.x,e.y)); }
 }
@@ -380,14 +381,14 @@ function drawIcon(g,name,x,y,s){ g.save(); g.translate(x,y); g.scale(s,s);
 
 // persona generica (NPC e protagonista)
 // ===================== PERSONAGGI (chibi con contorno) =====================
-const OL='#1e1420';
+const OL='#3a2433';
 function shade(hex,k){ const n=parseInt(hex.slice(1),16); let r=n>>16,gg=(n>>8)&255,b=n&255; r=clamp(Math.round(r*k),0,255); gg=clamp(Math.round(gg*k),0,255); b=clamp(Math.round(b*k),0,255); return '#'+((1<<24)|(r<<16)|(gg<<8)|b).toString(16).slice(1); }
 function drawPerson(g,x,y,L,face,t,moving,walk){
  const s=L.size||1, side=face==='l'||face==='r', up=face==='u';
  const sw=moving?Math.sin(walk):0, bob=moving?-Math.abs(Math.sin(walk))*1.6:Math.sin(t*2.2+x)*0.5;
  const fo=(c,lw=1.3)=>{ g.fillStyle=c; g.fill(); g.strokeStyle=OL; g.lineWidth=lw; g.stroke(); };
  g.save(); g.translate(x,y); g.scale(s,s);
- g.fillStyle='rgba(0,0,0,.28)'; ell(g,0,0,10,3.6); g.fill();
+ drawSoftShadow(g,0,0,10,3.6,40,x,y);
  if(face==='l') g.scale(-1,1);
  if(L.turtle){ drawTurtle(g,face,t,fo); g.restore(); return; }
  const boots=L.boots||'#5a3a26', pants=L.pants||'#4a3a3a', body=L.body, body2=L.body2||shade(body,0.72), skin=L.skin, hair=L.hair;
@@ -395,6 +396,7 @@ function drawPerson(g,x,y,L,face,t,moving,walk){
  if(side){ for(const k of [-1,1]){ const o=k*sw*3.5; g.beginPath(); rr(g,-3+o,-11,6,7,2); fo(pants); g.beginPath(); rr(g,-3.5+o,-6-(k*sw>0?1.5:0),8,6,2.5); fo(boots); } }
  else for(const k of [-1,1]){ const lift=Math.max(0,k*sw)*2.5; g.beginPath(); rr(g,k*4.2-3,-11-lift,6,7,2); fo(pants); g.beginPath(); rr(g,k*4.2-3.5,-6-lift,7,6,2.5); fo(boots); }
  g.translate(0,bob);
+ const breath=Math.sin(t*2.3+x*0.13); if(!moving){ g.translate(0,-10); g.scale(1-breath*0.012,1+breath*0.032); g.translate(0,10); }
  // braccio posteriore (vista laterale)
  const arm=(ax,ay,rot,dark)=>{ g.save(); g.translate(ax,ay); g.rotate(rot); g.beginPath(); rr(g,-2.4,-1,4.8,10,2.4); fo(dark?body2:body); g.beginPath(); circ(g,0,10,2.6); fo(skin,1.1); g.restore(); };
  if(side) arm(-1,-23,-sw*0.7,true);
