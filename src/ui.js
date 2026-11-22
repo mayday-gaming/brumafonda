@@ -1,6 +1,6 @@
 // ===================== INTERFACCIA HTML =====================
 const $=id=>document.getElementById(id);
-let menuOpen=false, shopOpen=false, menuTab='zaino';
+let menuOpen=false, shopOpen=false, menuTab='missione';
 function showTitle(){ $('title').classList.remove('hidden'); mode='title'; AU.setMusic('title'); const s=loadSave(); $('btnCont').disabled=!s; $('btnCont').textContent=s?`Continua  ·  ${s.fireflies||0}/${TOTAL_FIREFLIES} lucciole`:'Continua'; }
 function startGame(cont){
  AU.init(); S=cont&&loadSave()||newState(); if(!S.stats.frogseq) S.stats.frogseq=[];
@@ -12,7 +12,9 @@ function startGame(cont){
   'Al centro del villaggio ardeva la Grande Lanterna, nutrita da tre Fiamme antiche: del Bosco, del Mare e del Vento.',
   'Finché, una notte, un\'ombra grigia con ali enormi scese dal cielo... e la Lanterna si spense.',
   'Ilio, giovane apprendista lampionaio, si sveglia di soprassalto.',
-  'Pip: Ilio! Ilio! Svegliati! La nonna ti cerca, è qui fuori! Quella con il vestito viola!']); }
+  'Pip: Ilio! Ilio! Svegliati! La nonna ti cerca, è qui fuori! Quella con il vestito viola!',
+  'Pip: Guarda in basso a sinistra: lì c\'è sempre il nostro obiettivo. Una freccia dorata ti indica la strada, e una stellina il punto esatto.',
+  'Pip: Muoviti con le frecce (o il joystick) e parla con A. Se ti perdi, premi ✦ o il tasto P: ti dico io cosa fare!']); }
  else if(cont) banner={text:room.def.name,t:2.4};
 }
 $('btnNew').addEventListener('click',()=>{ if(loadSave()){ $('confirm').classList.remove('hidden'); return; } startGame(false); });
@@ -30,6 +32,11 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 function renderMenu(){
  document.querySelectorAll('#tabs button').forEach(b=>b.classList.toggle('on',b.dataset.t===menuTab));
  const box=$('menuBody'); let h='';
+ if(menuTab==='missione'){
+  h+=`<h4>Obiettivo attuale</h4><div class="page" style="background:rgba(255,224,138,.15);color:#fff;font-family:Fredoka,sans-serif">★ ${esc(curObjective().t)}</div><h4>Diario delle missioni</h4>`;
+  let cur=false; for(const q of QUESTS){ const d=q.done(); const now=!d&&!cur; if(now) cur=true; h+=`<div class="pill ${d||now?'':'off'}" style="margin-bottom:6px;font-size:14px">${d?'✓':now?'▶':'○'} ${esc(now||d?q.t:'???')}</div>`; }
+  h+=`<p class="hint">Premi ✦ (o P) durante il gioco per un consiglio di Pip.</p>`;
+ }
  if(menuTab==='zaino'){
   h+='<div class="grid">'; for(const k of ['pertica','lanterna','rampino','campana']){ const has=S.items[k]; h+=`<div class="card ${has?'':'locked'} ${S.sel===k?'sel':''}" data-it="${k}"><img src="${has?iconCanvas(k):''}" alt=""><b>${has?esc(ITEMS[k].name):'???'}</b><span>${has?esc(ITEMS[k].desc):'Non ancora trovato.'}</span></div>`; } h+='</div>';
   const fn=['Fiamma del Bosco','Fiamma del Mare','Fiamma del Vento']; h+='<h4>Fiamme della Grande Lanterna</h4><div class="row">'; fn.forEach((n,i)=>{ h+=`<div class="pill ${S.flags['flame'+i]?'':'off'}">${S.flags['flame'+i]?'<img src="'+iconCanvas('flame'+i,28)+'">':''}${n}</div>`; }); h+='</div>';
@@ -56,11 +63,12 @@ function renderMenu(){
  if(menuTab==='trofei'){ h+='<div class="trophies">'; for(const [id,n,d] of TROPHIES){ const has=S.trophies[id]; h+=`<div class="tr ${has?'':'off'}"><b>${has?'🏆':'🔒'} ${esc(n)}</b><span>${esc(has?d:(id==='konami'||id==='gatto'?'???':d))}</span></div>`; } h+='</div>'; }
  if(menuTab==='opzioni'){
   h+=`<h4>Comandi</h4><table class="keys"><tr><td>Muoversi</td><td>Frecce / WASD · joystick</td></tr><tr><td>A · Pertica, parla, apri</td><td>Spazio / J / Z</td></tr><tr><td>Fendente rotante</td><td>Tieni premuto A e rilascia</td></tr><tr><td>B · Oggetto</td><td>K / X</td></tr><tr><td>Cambia oggetto</td><td>Q / L / C · ⟳</td></tr><tr><td>Chiedi a Pip</td><td>P / H · ✦</td></tr><tr><td>Menu</td><td>Esc / M · ☰</td></tr></table>`;
-  h+=`<div class="row"><button class="btn" id="optMute">${AU.muted?'Attiva audio':'Disattiva audio'}</button><button class="btn" id="optTitle">Torna al titolo</button></div><p class="hint">Il gioco si salva da solo a ogni cambio di stanza.</p>`;
+  h+=`<div class="row"><button class="btn" id="optMute">${AU.muted?'Attiva audio':'Disattiva audio'}</button><button class="btn" id="optGuide">${S.flags.noGuide?'Mostra guida':'Nascondi guida'}</button><button class="btn" id="optTitle">Torna al titolo</button></div><p class="hint">Il gioco si salva da solo a ogni cambio di stanza.</p>`;
  }
  box.innerHTML=h;
  box.querySelectorAll('[data-it]').forEach(el=>el.addEventListener('click',()=>{ const k=el.dataset.it; if(k!=='pertica'&&S.items[k]){ S.sel=k; renderMenu(); AU.sfx('menu'); } }));
  const om=$('optMute'); om&&om.addEventListener('click',()=>{ AU.setMute(!AU.muted); $('bMute').textContent=AU.muted?'♪̸':'♪'; renderMenu(); });
+ const og=$('optGuide'); og&&og.addEventListener('click',()=>{ S.flags.noGuide=!S.flags.noGuide; save(); renderMenu(); });
  const ot=$('optTitle'); ot&&ot.addEventListener('click',()=>{ save(); closeMenu(); showTitle(); });
 }
 
