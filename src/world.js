@@ -4,9 +4,10 @@ const THEME={
  d1:{floor:'#4a3a4c',floor2:'#524255',wall:'#2b2030',wallTop:'#6b5470',acc:'#d08cff',moss:'#5f7a4a'},
  d2:{floor:'#2e4a52',floor2:'#35545c',wall:'#18292e',wallTop:'#4f7d86',acc:'#62f0dc',moss:'#3d6f6a'},
  d3:{floor:'#5c5045',floor2:'#66594c',wall:'#352c25',wallTop:'#a0866a',acc:'#ffc95a',moss:'#6d6a52'},
+ d4:{floor:'#47624a',floor2:'#4e6b50',wall:'#25403a',wallTop:'#8fcfb8',acc:'#a8ff9c',moss:'#6a9a52'},
  fn:{floor:'#2b2134',floor2:'#33283d',wall:'#15101c',wallTop:'#4d3b60',acc:'#c59bff',moss:'#3e2f4c'}
 };
-const ENT_CHARS='1234567nfcj$kabQ';
+const ENT_CHARS='123456789nfcj$kabQi';
 const SOLID='THRWBVFL#XYDZCsgOlmu';
 let room=null;
 function gk(t,x,y){ return room.key+'|'+t+'|'+x+','+y; }
@@ -16,7 +17,7 @@ function loadRoom(key){
  const floor=def.floor||(w==='ow'?'.':'_');
  room={key,def,w,floor,dark:def.dark||0,grid:[],idx:{s:{},C:{},E:{},g:{}},blocks:[],plates:[],crystal:0,cache:null,dirty:true,jOpen:false,burnQ:[],frogI:0,bossKey:key+'|boss'};
  ents=[]; projs=[]; parts=[]; rings=[];
- const cnt={s:0,C:0,E:0,g:0,n:0,b:0};
+ const cnt={s:0,C:0,E:0,g:0,n:0,b:0,i:0};
  for(let y=0;y<CH;y++){ const row=[];
   for(let x=0;x<CW;x++){
    let c=def.map[y][x];
@@ -49,6 +50,9 @@ function spawnFromChar(c,x,y,cnt){
   case '5': ents.push(mkEnt('granchio',px,py)); break;
   case '6': ents.push(mkEnt('velo',px,py)); break;
   case '7': ents.push(mkEnt('scarabeo',px,py)); break;
+  case '8': ents.push(mkEnt('spinarello',px,py)); break;
+  case '9': ents.push(mkEnt('vespa',px,py)); break;
+  case 'i': if(!S.got[id]) ents.push(mkEnt('ingr',px,py-4,{gid:id,ing:room.def.ingr[cnt.i]})); cnt.i++; break;
   case 'n': ents.push(mkEnt('npc',px,py,{id:room.def.npcs[cnt.n++]})); break;
   case 'f': if(!S.got[id]) ents.push(mkEnt('firefly',px,py-8,{gid:id})); break;
   case 'c': if(!S.got[id]) ents.push(mkEnt('piece',px,py-4,{gid:id})); break;
@@ -188,6 +192,13 @@ function drawStaticTile(g,c,tx,ty){
  if(c==='G'){ g.fillStyle='#07050c'; g.fillRect(x,y,TS,TS);
    if(tileAt(tx,ty-1)!=='G'){ const gr=g.createLinearGradient(0,y,0,y+14); gr.addColorStop(0,room.w==='ow'?'#6b5a48':th.wallTop); gr.addColorStop(1,'#07050c'); g.fillStyle=gr; g.fillRect(x,y,TS,14); }
    g.fillStyle='rgba(120,100,180,.12)'; circ(g,x+16,y+20,3); g.fill(); return; }
+ if(c==='#'&&room.key==='ow:0,0'){ // facciata della serra di vetro
+   const gr=g.createLinearGradient(x,y,x+TS,y+TS); gr.addColorStop(0,'#cdeee6'); gr.addColorStop(1,'#8fc8c0'); g.fillStyle=gr; g.fillRect(x,y,TS,TS);
+   g.fillStyle='rgba(120,200,120,.35)'; circ(g,x+8+hash(tx,ty)*16,y+22,7); g.fill(); circ(g,x+20,y+26,5); g.fill();
+   g.fillStyle='rgba(255,255,255,.45)'; g.beginPath(); g.moveTo(x+4,y+2); g.lineTo(x+12,y+2); g.lineTo(x+4,y+14); g.fill();
+   g.strokeStyle='#4a6a5a'; g.lineWidth=2.5; g.strokeRect(x+1,y+1,TS-2,TS-2); g.lineWidth=1.5; g.beginPath(); g.moveTo(x+16,y); g.lineTo(x+16,y+TS); g.moveTo(x,y+16); g.lineTo(x+TS,y+16); g.stroke();
+   if(tileAt(tx,ty-1)!=='#'){ g.fillStyle='#3a5a4a'; g.fillRect(x,y,TS,4); }
+   return; }
  if(c==='#'||(c==='Z'&&room.w!=='ow')){ const below=tileAt(tx,ty+1); const face=below!==null&&below!=='#'&&below!=='Z';
    g.fillStyle=th.wallTop; g.fillRect(x,y,TS,TS); g.fillStyle=th.wall; g.fillRect(x+1,y+1,TS-2,TS-2);
    g.strokeStyle='rgba(255,255,255,.07)'; g.lineWidth=1; for(let r=0;r<4;r++){ g.beginPath(); g.moveTo(x,y+r*8+0.5); g.lineTo(x+TS,y+r*8+0.5); g.stroke(); const o=(r%2)*8; for(let k=0;k<3;k++){ g.beginPath(); g.moveTo(x+o+k*16+0.5,y+r*8); g.lineTo(x+o+k*16+0.5,y+r*8+8); g.stroke(); } }
@@ -222,7 +233,8 @@ function drawStaticTile(g,c,tx,ty){
   case 'm': { const col=room.w==='ow'?(h>0.5?'#d9483b':'#9b5bd6'):(h>0.5?'#b16bd8':'#5fd0b9');
     g.fillStyle='rgba(0,0,0,.25)'; ell(g,x+16,y+27,10,4); g.fill(); g.fillStyle='#efe3c9'; rr(g,x+12,y+14,8,13,3); g.fill(); g.fillStyle=col; g.beginPath(); g.ellipse(x+16,y+14,13,9,0,Math.PI,0); g.fill(); g.fillStyle='rgba(255,255,255,.8)'; circ(g,x+10,y+11,2); g.fill(); circ(g,x+19,y+9,2.5); g.fill(); circ(g,x+23,y+12,1.5); g.fill(); break; }
   case 'u': { g.fillStyle='#6b4a2e'; ell(g,x+16,y+20,10,7); g.fill(); g.fillStyle='#c79a63'; ell(g,x+16,y+17,9,5); g.fill(); break; }
-  case 'E': { if(room.w==='ow'){ g.fillStyle='#14101a'; g.beginPath(); g.moveTo(x+3,y+TS); g.lineTo(x+3,y+12); g.arc(x+16,y+12,13,Math.PI,0); g.lineTo(x+29,y+TS); g.closePath(); g.fill(); g.strokeStyle='#4a4048'; g.lineWidth=3; g.stroke(); }
+  case 'E': { if(room.key==='ow:0,0'){ g.fillStyle='#3a5a4a'; g.fillRect(x+3,y,TS-6,TS); g.fillStyle='#bfe8dc'; g.fillRect(x+6,y+3,TS-12,TS-3); g.strokeStyle='#3a5a4a'; g.lineWidth=1.5; g.beginPath(); g.moveTo(x+16,y+3); g.lineTo(x+16,y+TS); g.stroke(); g.fillStyle='#e8c060'; circ(g,x+13,y+18,1.6); g.fill(); circ(g,x+19,y+18,1.6); g.fill(); break; }
+    if(room.w==='ow'){ g.fillStyle='#14101a'; g.beginPath(); g.moveTo(x+3,y+TS); g.lineTo(x+3,y+12); g.arc(x+16,y+12,13,Math.PI,0); g.lineTo(x+29,y+TS); g.closePath(); g.fill(); g.strokeStyle='#4a4048'; g.lineWidth=3; g.stroke(); }
     else { g.fillStyle='#120e18'; g.fillRect(x+3,y+3,TS-6,TS-6); g.fillStyle=th.wallTop; for(let i=0;i<4;i++) g.fillRect(x+5,y+6+i*6,TS-10,2); } break; }
  }
 }

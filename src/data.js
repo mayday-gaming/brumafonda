@@ -36,18 +36,18 @@ defRoom('ow:0,2',{name:'Radura dei Sussurri',music:'field',dark:0.15,
 
 defRoom('ow:0,1',{name:'Bosco Muschiato',music:'field',dark:0.3,
  map:[
- "TTTTTTTTTTTTTTTT",
- "TTmRRRRERRRm.fTT",
- "T.m....P....m..T",
- "T...1..P..m...,T",
+ "TTTTTTTTTTTT..TT",
+ "TTmRRRRERRRmZZTT",
+ "T.m....P.......T",
+ "T...1..P..m...fT",
  "T.m....PPPPPPPPP",
  "T..s.m.P...1....",
  "T......P..m.....",
  "T.m..1.P.....m.T",
- "T...,..P.,..B..T",
+ "T...,..P.,..B.iT",
  "TTm....PP..mBBTT",
  "TTTTTTT..TTTTTTT"],
- signs:["↑ Tana del Fungo. Vietato l'ingresso ai deboli di naso."],
+ signs:["↑ Tana del Fungo. Vietato l'ingresso ai deboli di naso."],ingr:['fungo'],
  warps:[{to:'d1:1,2',x:7,y:8}]});
 
 defRoom('ow:1,1',{name:'Crocevia del Viandante',music:'field',dark:0.12,
@@ -106,13 +106,13 @@ defRoom('ow:3,0',{name:'Soglia del Nido',music:'dark',dark:0.45,
  "....,.......g..R",
  ".....s...g...g.R",
  "..........,....R",
- "R...2......2...R",
- "R.....,......f.R",
- "RR...........RRR",
+ "RGGG2......2...R",
+ "RGcG..,......f.R",
+ "RGGG.........RRR",
  "RRRRRRRRRRRRRRRR"],
  signs:["Nido della Falena. Tre fiamme per tre sigilli."],
  graves:["Cenerale ha vegliato qui. Non è mai stato sepolto.","Falena n.1, Falena n.2, Falena n.3... ha smesso di contare.","Il buio non è cattivo. Ha solo paura di restare solo."],
- warps:[{to:'fn:0,1',x:7,y:8}]});
+ warps:[{to:'fn:0,1',x:5,y:9}]});
 
 defRoom('ow:2,1',{name:'Prato delle Rane',music:'field',dark:0.12,
  map:[
@@ -164,7 +164,7 @@ defRoom('ow:2,2',{name:'Campi del Mulino',music:'field',dark:0.08,
  map:[
  "TTTTTTTPPTTTTTTT",
  "T..HHH.PP.,,,,,T",
- "T..HHH.PP.,,,,,T",
+ "T..HHH.PP.,,,,iT",
  "T...n..PP.FFFFFT",
  "PPPPPPPPPPPPPVPP",
  "P..1.....B...VPP",
@@ -173,13 +173,13 @@ defRoom('ow:2,2',{name:'Campi del Mulino',music:'field',dark:0.08,
  "T,1,.,.,.,.,.,.T",
  "T.,.,.,$,.,.,.,T",
  "TTTTTTTTTTTTTTTT"],
- npcs:['fausto']});
+ npcs:['fausto'],ingr:['miele']});
 
 defRoom('ow:3,2',{name:'Scogliera del Pescatore',music:'sea',dark:0.08,
  map:[
  "TTTTTTTTTTTTTTTT",
  "TT..,....RRRRRRR",
- "T....5...RWWWWWW",
+ "T..i.5...RWWWWWW",
  "T..,.....RWWWWWW",
  "PPPPPP...RWWWWWW",
  "P...PPP..RWWWWWW",
@@ -188,7 +188,7 @@ defRoom('ow:3,2',{name:'Scogliera del Pescatore',music:'sea',dark:0.08,
  "T.f..,..PSSSRWWW",
  "TT......PSSSSRWW",
  "TTTTTTTPPRRRRRWW"],
- npcs:['barnaba']});
+ npcs:['barnaba'],ingr:['sale']});
 
 defRoom('ow:3,3',{name:'Faro Sommerso',music:'sea',dark:0.1,floor:'S',
  map:[
@@ -529,7 +529,7 @@ defRoom('fn:0,1',{name:'Nido della Falena',music:'dark',dark:0.7,
  "#GGGGGGGGGGGGGG#",
  "#_6__________6_#",
  "#VVVVVVVVVVVOVV#",
- "#______________#",
+ "#GGGGGGGGGGGGGG#",
  "#______E_______#",
  "################"],
  warps:[{to:'ow:3,0',x:7,y:2}]});
@@ -547,6 +547,121 @@ defRoom('fn:0,0',{name:'Cuore del Nido',music:'final',dark:0.6,boss:'falena',
  "#______________#",
  "#######__#######"]});
 
+
+// ---------- ESPANSIONE: ALTOPIANO DEI VENTI E SERRA DI VETRO ----------
+defRoom('ow:0,0',{name:'Altopiano dei Venti',music:'wind',dark:0.12,
+ map:[
+ "RRRRRRRRRRRRRRRR",
+ "RRRR###E###RRRRR",
+ "RRR.,s.......RRR",
+ "RR..........n.RR",
+ "R..,..RR.GGG...R",
+ "R.....R..GcG...R",
+ "R..1.....GGG...R",
+ "R....,....R..f.R",
+ "RR.....B.B.....R",
+ "RRR........B..RR",
+ "RRRRRRRRRRRR..RR"],
+ npcs:['giacinta'],
+ signs:["↑ Serra di Vetro. Si prega di non calpestare le aiuole. E nemmeno la Regina."],
+ warps:[{to:'d4:1,2',x:7,y:8}]});
+defRoom('d4:1,2',{name:'Serra di Vetro',music:'garden',dark:0.25,
+ map:[
+ "#######DD#######",
+ "#m____________m#",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "________s_______",
+ "#______________#",
+ "#__Y________Y__#",
+ "#______________#",
+ "#m_____E______m#",
+ "################"],
+ signs:["Diario di Giacinta: «I rami della Regina temono il fuoco. Quando bruciano entrambi, il suo fiore si apre.»"],
+ warps:[{to:'ow:0,0',x:7,y:2}]});
+defRoom('d4:0,2',{name:'Serra di Vetro',music:'garden',dark:0.25,open:'enemies',
+ map:[
+ "#######JJ#######",
+ "#______________#",
+ "#__8________8__#",
+ "#______________#",
+ "#VVVVVVVVVVVVVV#",
+ "#_______________",
+ "#______________#",
+ "#__f___________#",
+ "#______________#",
+ "#______________#",
+ "################"]});
+defRoom('d4:0,1',{name:'Serra di Vetro',music:'garden',dark:0.25,
+ map:[
+ "################",
+ "#______________#",
+ "#___m______m___#",
+ "#______________#",
+ "#______C_______#",
+ "#______________#",
+ "#___m______m___#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#######__#######"],
+ chests:[{item:'stivali'}]});
+defRoom('d4:2,2',{name:'Serra di Vetro',music:'garden',dark:0.3,
+ map:[
+ "#######__#######",
+ "#GGGGGGG_GGGGGG#",
+ "#GGGGGGGGGGGGCG#",
+ "#GGGGGGG_GGGG_G#",
+ "#GGGGGGGGGGGGGG#",
+ "____G_G__G_G___#",
+ "#___GGGGGGGGGGG#",
+ "#_f_GGGGGGGGGGG#",
+ "#___GGGGGGGGGGG#",
+ "#___GGGGGGGGGGG#",
+ "################"],
+ chests:[{key:1}]});
+defRoom('d4:2,1',{name:'Serra di Vetro',music:'garden',dark:0.3,
+ map:[
+ "################",
+ "#______________#",
+ "#__GGGGGGGGGG__#",
+ "#__G________G__#",
+ "#__G__GGGG__G__#",
+ "#__G__GcfG__G__#",
+ "#__G__GGGG__G__#",
+ "#__G___9____G__#",
+ "#__GGGGGGGGGG__#",
+ "#______________#",
+ "#######__#######"]});
+defRoom('d4:1,1',{name:'Serra di Vetro',music:'garden',dark:0.35,open:'torches',
+ map:[
+ "#######JJ#######",
+ "#______________#",
+ "#_X__GGGGGG__X_#",
+ "#____G____G____#",
+ "#____G_9f_G____#",
+ "#GGGGG____GGGGG#",
+ "#____G____G____#",
+ "#_X__GGGGGG__X_#",
+ "#______________#",
+ "#______8_______#",
+ "#######__#######"]});
+defRoom('d4:1,0',{name:'Trono della Regina Rovo',music:'boss',dark:0.25,boss:'regina',
+ map:[
+ "################",
+ "#m____________m#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#______________#",
+ "#m____________m#",
+ "#######__#######"],
+ exit:{to:'ow:0,0',x:7,y:2}});
+
 // ===================== TESTI =====================
 const PAGES = [
  "Oggi è arrivato un bambino senza nome, con gli occhi grandi come lanterne. Lo chiamerò Cenerale, perché dorme sempre vicino alla cenere del camino.",
@@ -563,7 +678,8 @@ const ITEMS = {
  pertica:{name:'Pertica del Lampionaio',desc:'Lunga, robusta, profuma di fumo. Tieni premuto A e rilascia per un fendente rotante.'},
  lanterna:{name:'Lanterna di Orsola',desc:'Lancia una fiammata: brucia i rovi, accende le torce, illumina gli spettri.'},
  rampino:{name:'Rampino del Guardiano',desc:'Si aggancia agli anelli e ti porta oltre i baratri. Stordisce i nemici e recupera gli oggetti.'},
- campana:{name:'Campana di Vetro',desc:'Il suo rintocco frantuma le pareti incrinate, stordisce i nemici e scambia i cristalli.'}
+ campana:{name:'Campana di Vetro',desc:'Il suo rintocco frantuma le pareti incrinate, stordisce i nemici e scambia i cristalli.'},
+ stivali:{name:'Stivali di Piuma',desc:'Leggeri come un passero: permettono di saltare oltre le buche larghe una mattonella e di schivare le onde d\'urto.'}
 };
 
 const TROPHIES = [
@@ -580,8 +696,13 @@ const TROPHIES = [
  ['ricco','Ricco sfondato','Possiedi 250 conchiglie.'],
  ['intatto','Senza un graffio','Sconfiggi un boss senza subire danni.'],
  ['biblio','Archivista','Trova tutte le 6 pagine del diario.'],
- ['lucciole','Custode dei lumini','Ritrova tutti i 24 lumini.'],
+ ['lucciole','Custode dei lumini','Ritrova tutti i 30 lumini.'],
  ['fine','La notte è finita','Completa il gioco.'],
- ['cuore','Cuore intero','Ricomponi un cuore con 4 frammenti.']
+ ['cuore','Cuore intero','Ricomponi un cuore con 4 frammenti.'],
+ ['saltatore','Piedi di piuma','Salta 60 volte.'],
+ ['torta','Pasticcere','Aiuta Lalla a preparare la Torta della Luna.'],
+ ['serra','Pollice verde','Sconfiggi la Regina Rovo.']
 ];
-const TOTAL_FIREFLIES = 24;
+const TOTAL_FIREFLIES = 30;
+const TOTAL_PIECES = 8;
+const INGREDIENTS={fungo:{name:'Fungo stellato',where:'Bosco Muschiato'},miele:{name:'Miele dorato',where:'Campi del Mulino'},sale:{name:'Sale di scogliera',where:'Scogliera del Pescatore'}};
