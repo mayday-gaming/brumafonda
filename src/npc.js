@@ -12,13 +12,19 @@ const NPC={
     'Nonna Orsola: Anche gli altri lumini sono scappati quando la Lanterna si è spenta. Se li ritrovi, i lampioni del villaggio torneranno ad accendersi.',
     'Nonna Orsola: La prima Fiamma è nel Bosco Muschiato, dentro la Tana del Fungo. A nord-ovest, passando dal crocevia.',
     {fn:()=>{S.flags.intro=1; award('primo'); save();}}]; }
+   if(S.flames>=3&&!S.items.stivali) return ['Nonna Orsola: Le tre Fiamme... ce l\'hai fatta, Ilio.','Nonna Orsola: Ma il Nido della Falena è sospeso sopra una crepa profonda. Non si attraversa né a piedi né col rampino.','Nonna Orsola: Giacinta, la giardiniera della Serra di Vetro, aveva degli stivali leggeri come piume. La Serra è sull\'Altopiano dei Venti, oltre le rocce incrinate a nord del Bosco Muschiato.'];
    if(S.flames>=3) return ['Nonna Orsola: Le tre Fiamme... ce l\'hai fatta, Ilio.','Nonna Orsola: Quella falena. Temo di sapere chi sia. Se lo incontri nel Nido... prova a parlargli, prima di colpirlo.','Nonna Orsola: Il Nido è a nord-est, oltre il Campanile.'];
    if(S.items.campana) return ['Nonna Orsola: Il Campanile Spezzato! Ai miei tempi suonava ogni sera al tramonto.','Nonna Orsola: Lassù c\'è l\'ultima Fiamma, quella del Vento.'];
    if(S.items.rampino) return ['Nonna Orsola: Un rampino? Allora puoi attraversare l\'Abisso del Vento, a nord del crocevia.','Nonna Orsola: Oltre l\'abisso c\'è il Campanile. Le sue torce si accendono solo con la luce vera.'];
    if(S.items.lanterna) return ['Nonna Orsola: La mia lanterna! L\'ho persa trent\'anni fa in quella tana. Fanne buon uso.','Nonna Orsola: Brucia i rovi a est del villaggio. Oltre la spiaggia c\'è il Faro Sommerso.'];
    return ['Nonna Orsola: La Tana del Fungo è nel Bosco Muschiato, a nord-ovest.','Nonna Orsola: E ricordati: se ti senti perso, chiedi a Pip (tasto P o ✦).']; }},
  lalla:{name:'Lalla la Fornaia',look:{skin:'#e8b48a',hair:'#6b3a1e',hairStyle:'long',body:'#d9584a',apron:'#fff6e6',hat:'band',hatc:'#fff6e6',pants:'#7a4a3a'},
-  talk(){ const l=['Lalla: Senza la Lanterna il mio forno non lievita. Il pane viene piatto come una lapide!'];
+  talk(){ const ing=S.ingr||{}, have=Object.keys(ing).length;
+   if(S.flags.intro&&!S.flags.cakeAsked){ S.flags.cakeAsked=1; save(); return ['Lalla: Ilio! Quando la Grande Lanterna tornerà ad accendersi, voglio sfornare la Torta della Luna. Ma mi mancano tre ingredienti.',`Lalla: Il ${INGREDIENTS.fungo.name} del ${INGREDIENTS.fungo.where}, il ${INGREDIENTS.miele.name} dei ${INGREDIENTS.miele.where} e il ${INGREDIENTS.sale.name} della ${INGREDIENTS.sale.where}.`,have?`Lalla: Ne hai già ${have}? Che fortuna! Portami anche gli altri.`:'Lalla: Se li trovi, portameli. Ti ricompenserò come si deve!']; }
+   if(S.flags.cakeAsked&&!S.flags.cakeDone&&have>=3){ return ['Lalla: Fungo stellato, miele dorato e sale di scogliera... ci sono tutti!','Lalla: La Torta della Luna è pronta. Il primo pezzo è tuo, e dentro ho nascosto una sorpresa.',{fn:()=>{ S.flags.cakeDone=1; award('torta'); S.hp=S.maxhp; save(); }},{fn:()=>gainPiece()}]; }
+   if(S.flags.cakeDone&&!S.flags.cakeLumino){ return ['Lalla: Ah, quasi dimenticavo! Mentre impastavo, dalla farina è uscito un lumino. Credo che sia tuo.',{fn:()=>{ S.flags.cakeLumino=1; gainFirefly(); save(); }}]; }
+   const l=['Lalla: Senza la Lanterna il mio forno non lievita. Il pane viene piatto come una lapide!'];
+   if(S.flags.cakeAsked&&!S.flags.cakeDone){ const miss=Object.keys(INGREDIENTS).filter(k=>!ing[k]).map(k=>`${INGREDIENTS[k].name} (${INGREDIENTS[k].where})`); l[0]=`Lalla: Per la Torta della Luna mi mancano ancora: ${miss.join(', ')}.`; }
    if(S.hp<S.maxhp){ l.push('Lalla: Ma guarda come sei ridotto! Tieni, una pagnotta calda.'); l.push({fn:()=>{S.hp=S.maxhp; AU.sfx('heart'); floatText(P.x,P.y-40,'Cuori ricaricati!','#ff9aa8');}}); }
    else l.push(pick(['Lalla: Il gatto Bricco ruba sempre le briciole. Ma secondo me sa qualcosa che noi non sappiamo.','Lalla: Dicono che le rane del prato cantino solo per chi conosce la loro canzone.','Lalla: Se torni ferito, passa da me. Il pane cura tutto, tranne la noia.']));
    return l; }},
@@ -46,6 +52,10 @@ const NPC={
 };
 function giveItemQuiet(n){ S.items[n]=true; AU.sfx('item'); P.hold=n; setTimeout(()=>{ if(P) P.hold=null; },1400); floatText(P.x,P.y-50,'Pertica del Lampionaio!','#ffe08a'); }
 
+NPC.giacinta={name:'Giacinta',look:{skin:'#f0c9a0',hair:'#7a4a2a',hairStyle:'long',body:'#5a9a6a',apron:'#e8f0d0',hat:'wide',hatc:'#c8d8a0',pants:'#4a5a3a'},
+ talk(){ if(!S.items.stivali) return ['Giacinta: Sono Giacinta, la giardiniera della Serra di Vetro. O almeno lo ero, prima che la Regina Rovo si svegliasse.','Giacinta: Quando la Lanterna si è spenta, le sue spine hanno invaso ogni aiuola. Dentro ho lasciato i miei Stivali di Piuma.','Giacinta: Con quelli si salta sopra le crepe come un passero.','Pip: Sopra le crepe... tipo quella davanti al Nido della Falena?','Giacinta: Proprio quella. Ma attento agli Spinarelli: si chiudono a riccio, e solo il fuoco li fa scappare.'];
+  if(!S.flags.regina) return ['Giacinta: Gli stivali ti stanno benissimo!','Giacinta: La Regina ha due rami spinosi. Bruciali entrambi e il suo fiore si aprirà. E quando colpisce il terreno, salta sopra l\'onda!'];
+  return ['Giacinta: La serra respira di nuovo. Senti che profumo?','Giacinta: Grazie, piccolo lampionaio. Che la tua lanterna non si spenga mai.']; }};
 const CAT_LINES=['Il gatto ti guarda. Miao.','Il gatto sbadiglia con aria di superiorità.','Il gatto si gira dall\'altra parte.','Bricco: «Mrrr.»','Il gatto si pulisce una zampa. Sembra pensieroso.','Il gatto finge di non conoscerti.','Bricco ti osserva. Forse sta per dire qualcosa.','Il gatto si stiracchia. Molto lentamente.','Bricco: «...miao?»'];
 function talkCat(){ S.stats.cat++; AU.sfx('meow');
  if(S.stats.cat===10){ award('gatto'); return ['Il gatto si avvicina e ti sussurra all\'orecchio:','Bricco: «Su, su, giù, giù, sinistra, destra, sinistra, destra, B, A.»','Poi si pulisce una zampa come se niente fosse. Sotto di lui c\'era un lumino addormentato!',{fn:()=>{ if(!S.flags.cat){ S.flags.cat=1; gainFirefly(); save(); } }}]; }
@@ -71,12 +81,15 @@ function pipHint(){
  else if(!S.flags.flame1) h='Usa il rampino sugli anelli: ti porta dall\'altra parte dei baratri. E l\'anguilla... ha un lume sulla testa, no?';
  else if(!it.campana) h='L\'Abisso del Vento è a nord del crocevia. Oltre, il Campanile: accendi le sue torce per aprire la porta.';
  else if(!S.flags.flame2) h='La campana frantuma le pareti incrinate e scambia i cristalli arancioni e blu. Il gufo? Suona quando i suoi occhi diventano rossi!';
- else if(S.flames>=3&&!S.flags.done) h='Il Nido della Falena è a est del Campanile. Il sigillo si aprirà davanti alle tre Fiamme. Servirà tutto quello che hai imparato.';
+ else if(!it.stivali) h='Davanti al Nido c\'è una crepa troppo larga. Servono gli Stivali di Piuma: sono nella Serra di Vetro, sull\'Altopiano dei Venti. Rompi con la campana le rocce incrinate a nord del Bosco Muschiato.';
+ else if(!S.flags.regina) h='Salta con Maiusc (o ⤒) prendendo la rincorsa dal bordo. La Regina Rovo apre il fiore solo quando entrambi i suoi rami bruciano. E quando senti la terra tremare... salta!';
+ else if(!S.flags.done) h='Il Nido della Falena è a est del Campanile. Brucia i rovi, salta la crepa, poi usa tutto quello che hai imparato.';
  else h='Abbiamo salvato Brumafonda! Ma ci sono ancora segreti in giro...';
  const extra=[];
  if(S.fireflies<TOTAL_FIREFLIES) extra.push(`Lumini ritrovati: ${S.fireflies}/${TOTAL_FIREFLIES}. Alcune si nascondono dietro rovi, rocce incrinate o... nei favori che fai alla gente.`);
  if(S.pages.length<6) extra.push(`Pagine del diario: ${S.pages.length}/6. La Strega Ortica, nella palude a sud-ovest, è curiosa di sapere cosa c'è scritto.`);
- if(S.pieces<4) extra.push('I Frammenti di Cuore sono spesso su isolotti o dietro pareti incrinate. Ciottolo ne vende uno.');
+ if(S.flags.cakeAsked&&!S.flags.cakeDone) extra.push('Lalla aspetta ancora gli ingredienti per la Torta della Luna. Guarda tra i fiori, sotto gli alberi e vicino al mare.');
+ if(S.pieces<TOTAL_PIECES) extra.push('I Frammenti di Cuore sono spesso su isolotti o dietro pareti incrinate. Ciottolo ne vende uno.');
  if(!S.trophies.gatto) extra.push('Bricco, il gatto del villaggio, sembra sempre sul punto di dire qualcosa. Forse basta insistere.');
  if(!S.flags.frogs) extra.push('Al Prato delle Rane c\'è un cartello con una canzone. Le rane rispondono alla pertica...');
  const lines=['Pip: Il nostro obiettivo: '+curObjective().t+'.','Pip: '+h]; if(extra.length&&Math.random()<0.8) lines.push('Pip: '+pick(extra));
