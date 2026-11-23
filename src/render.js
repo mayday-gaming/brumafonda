@@ -63,7 +63,8 @@ function renderWorld(g){
 }
 
 function drawHero(g){
- g.save();
+ const JZ=P.jz||0; if(JZ>0) drawSoftShadow(g,P.x,P.y,10*(1-JZ/40),3.6*(1-JZ/40),30);
+ g.save(); if(JZ>0) g.translate(0,-JZ);
  if(P.falling>0){ const k=P.falling/0.55; g.translate(P.x,P.y); g.scale(k,k); g.rotate((1-k)*6); g.translate(-P.x,-P.y); }
  if(P.inv>0&&mode==='play'&&Math.sin(T*45)>0) g.globalAlpha=0.35;
  const swinging=P.swing>0, base=Math.atan2(P.fy,P.fx);
@@ -80,7 +81,9 @@ function drawHero(g){
    g.save(); g.translate(h.x,h.y); g.rotate(Math.atan2(h.dy,h.dx)); g.strokeStyle='#e0e4ea'; g.lineWidth=2.5; g.beginPath(); g.moveTo(-4,0); g.lineTo(4,0); g.moveTo(4,0); g.lineTo(0,-5); g.moveTo(4,0); g.lineTo(0,5); g.stroke(); g.restore(); }
  P.sqk=(P.sqk||0)*0.86; if(P.moving!==P.wasMoving){ P.sqk+=P.moving?0.06:-0.05; P.wasMoving=P.moving; }
  g.save(); g.translate(P.x,P.y); g.rotate(clamp(P.vx/122,-1,1)*0.06); g.scale(1+P.sqk,1-P.sqk); g.translate(-P.x,-P.y);
- drawPerson(g,P.x,P.y,HERO,P.face,T,P.moving,P.walk);
+ const jz=P.jz||0; personNoShadow=jz>0;
+ drawPerson(g,P.x,P.y,HERO,P.face,T,P.moving&&!(jz>0),P.walk);
+ personNoShadow=false;
  g.restore();
  if(idle&&P.face==='u') back();
  if(swinging&&P.face!=='u'){ const p=easeOut(1-P.swing/0.24); const a0=base-1.5, a=a0+p*3;
@@ -101,6 +104,8 @@ function drawProj(g,p){
   case 'bubble': g.strokeStyle='rgba(220,250,255,.9)'; g.lineWidth=2; circ(g,p.x,p.y,6); g.stroke(); g.fillStyle='rgba(150,220,255,.35)'; circ(g,p.x,p.y,6); g.fill(); g.fillStyle='#fff'; circ(g,p.x-2,p.y-2,1.5); g.fill(); break;
   case 'feather': g.save(); g.translate(p.x,p.y); g.rotate(Math.atan2(p.vy,p.vx)); g.fillStyle='#e9c47a'; g.beginPath(); g.ellipse(0,0,8,2.6,0,0,6.28); g.fill(); g.strokeStyle='#8a6028'; g.lineWidth=1; g.beginPath(); g.moveTo(-8,0); g.lineTo(8,0); g.stroke(); g.restore(); break;
   case 'dust': g.fillStyle='rgba(200,190,215,.85)'; circ(g,p.x,p.y,5); g.fill(); g.fillStyle='rgba(255,255,255,.6)'; circ(g,p.x,p.y,2); g.fill(); break;
+  case 'wave': { const a=clamp(1-p.r/p.max,0,1); g.save(); g.translate(p.x,p.y); g.scale(1,0.6); g.strokeStyle=`rgba(110,80,50,${0.75*a+0.15})`; g.lineWidth=7; circ(g,0,0,p.r); g.stroke(); g.strokeStyle=`rgba(230,200,150,${0.6*a+0.1})`; g.lineWidth=2.5; circ(g,0,0,p.r-3); g.stroke(); g.restore(); break; }
+  case 'seed': g.save(); g.translate(p.x,p.y); g.rotate(T*8); g.fillStyle='#8a5a30'; g.beginPath(); g.ellipse(0,0,5,3.5,0,0,6.28); g.fill(); g.strokeStyle='#3a2433'; g.lineWidth=1; g.stroke(); g.fillStyle='#7cc565'; g.beginPath(); g.ellipse(4,-3,3,1.6,-0.6,0,6.28); g.fill(); g.restore(); break;
   case 'orb': { const gr=g.createRadialGradient(p.x,p.y,0,p.x,p.y,9); gr.addColorStop(0,'#f0d8ff'); gr.addColorStop(0.4,'#7a3fd0'); gr.addColorStop(1,'rgba(40,10,80,0)'); g.fillStyle=gr; circ(g,p.x,p.y,9); g.fill(); break; }
  }
 }
@@ -250,7 +255,7 @@ function renderEnding(g){
  show(END.tru?'La notte è finita.':'La Lanterna arde di nuovo.',70,30,'#fff3d0',0.5);
  show(END.tru?'Brumafonda ha ritrovato la sua luce... e un nuovo amico.':'Ma da qualche parte, una piccola ombra ha ancora paura del buio.',100,14,'#f0e0ff',1.5);
  const m=Math.floor(S.stats.time/60), s=Math.floor(S.stats.time%60);
- const rows=[`Tempo di gioco: ${m}m ${String(s).padStart(2,'0')}s`,`Lumini: ${S.fireflies}/${TOTAL_FIREFLIES}`,`Pagine del diario: ${S.pages.length}/6`,`Frammenti di cuore: ${S.pieces}/4`,`Trofei: ${Object.keys(S.trophies).length}/${TROPHIES.length}`,`Nemici sconfitti: ${S.stats.kills}   ·   Cadute: ${S.stats.falls}`];
+ const rows=[`Tempo di gioco: ${m}m ${String(s).padStart(2,'0')}s`,`Lumini: ${S.fireflies}/${TOTAL_FIREFLIES}`,`Pagine del diario: ${S.pages.length}/6`,`Frammenti di cuore: ${S.pieces}/${TOTAL_PIECES}`,`Trofei: ${Object.keys(S.trophies).length}/${TROPHIES.length}`,`Nemici sconfitti: ${S.stats.kills}   ·   Cadute: ${S.stats.falls}`];
  rows.forEach((r,i)=>show(r,145+i*22,15,'#ffe9d6',3+i*0.4));
  show(END.tru?'FINALE VERO':'Ritrova tutti i lumini per il finale vero.',288,13,END.tru?'#eaff8a':'#cdbfe0',6);
  if(t>4&&Math.sin(T*4)>0) show('Premi A per tornare al titolo',GH-24,13,'#ffcf6b',4);

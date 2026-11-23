@@ -36,6 +36,7 @@ const MUS={
  tower:{bpm:96,root:53,scale:[0,2,5,7,10],prog:[0,-2,5,3],lead:'triangle',seed:29},
  boss:{bpm:142,root:45,scale:[0,1,3,7,8],prog:[0,1,0,-2],lead:'square',seed:31,drums:1},
  final:{bpm:152,root:43,scale:[0,1,4,6,7],prog:[0,1,-2,-1],lead:'sawtooth',seed:37,drums:1},
+ garden:{bpm:100,root:60,scale:[0,2,4,7,9],prog:[0,5,-3,2],lead:'triangle',seed:41},
  title:{bpm:72,root:57,scale:[0,2,4,7,9],prog:[0,-4,-7,-2],lead:'sine',seed:2}
 };
 const AU={ctx:null,m:null,mus:null,muted:false,cur:null,step:0,next:0,pat:{},
@@ -102,6 +103,9 @@ const AU={ctx:null,m:null,mus:null,muted:false,cur:null,step:0,next:0,pat:{},
    case 'meow': T.tone(700,0.35,'triangle',0.08,0.6); T.tone(900,0.2,'sine',0.04,0.7,0.05); break;
    case 'warp': T.tone(200,0.8,'sine',0.1,4); T.noise(0.8,0.1,800,0,'bandpass',4); break;
    case 'menu': T.tone(660,0.06,'triangle',0.06); break;
+   case 'jump': T.tone(420,0.14,'triangle',0.07,1.8); T.noise(0.08,0.06,3000,0,'highpass'); break;
+   case 'land': T.noise(0.1,0.12,400,0,'lowpass'); break;
+   case 'wave': T.tone(70,0.6,'sawtooth',0.12,0.6); T.noise(0.5,0.18,300,0,'lowpass',0.5); break;
   }
  },
  frog(i){ const notes=[0,4,7,12]; this.tone(196*2**(notes[i]/12),0.35,'square',0.08,0.98); this.tone(98*2**(notes[i]/12),0.3,'sine',0.1); },
@@ -137,9 +141,9 @@ const AU={ctx:null,m:null,mus:null,muted:false,cur:null,step:0,next:0,pat:{},
 
 // ===================== INPUT =====================
 const KB={}, LATCH={};
-const IN={x:0,y:0,a:0,b:0,c:0,m:0,p:0, pa:0,pb:0,pc:0,pm:0,pp:0, aP:0,aR:0,bP:0,cP:0,mP:0,pP:0, joyx:0,joyy:0, ta:0,tb:0,tc:0,tm:0,tp:0};
+const IN={x:0,y:0,a:0,b:0,c:0,m:0,p:0,j:0, pa:0,pb:0,pc:0,pm:0,pp:0,pj:0, aP:0,aR:0,bP:0,cP:0,mP:0,pP:0,jP:0, joyx:0,joyy:0, ta:0,tb:0,tc:0,tm:0,tp:0,tj:0};
 const KMAP={ArrowUp:'u',KeyW:'u',ArrowDown:'d',KeyS:'d',ArrowLeft:'l',KeyA:'l',ArrowRight:'r',KeyD:'r',
- Space:'a',KeyJ:'a',KeyZ:'a',Enter:'a', KeyK:'b',KeyX:'b', KeyQ:'c',KeyL:'c',KeyC:'c', Escape:'m',KeyM:'m',Tab:'m', KeyP:'p',KeyH:'p'};
+ Space:'a',KeyJ:'a',KeyZ:'a',Enter:'a', KeyK:'b',KeyX:'b', KeyQ:'c',KeyC:'c', ShiftLeft:'j',ShiftRight:'j',KeyL:'j',KeyV:'j', Escape:'m',KeyM:'m',Tab:'m', KeyP:'p',KeyH:'p'};
 const konamiSeq='uuddlrlrba'; let konamiBuf='';
 function konamiPush(ch){ konamiBuf=(konamiBuf+ch).slice(-10); if(konamiBuf===konamiSeq) onKonami(); }
 addEventListener('keydown',e=>{
@@ -153,7 +157,7 @@ function pollInput(){
  if(IN.joyx||IN.joyy){ x=IN.joyx; y=IN.joyy; }
  const l=Math.hypot(x,y); if(l>1){x/=l;y/=l;}
  IN.x=x; IN.y=y;
- for(const b of ['a','b','c','m','p']){ const v=(KB[b]||IN['t'+b])?1:0, l=LATCH[b]; LATCH[b]=0; IN[b+'P']=(v&&!IN['p'+b])||l?1:0; if(b==='a') IN.aR=(!v&&(IN.pa||l))?1:0; IN['p'+b]=v; IN[b]=v; }
+ for(const b of ['a','b','c','m','p','j']){ const v=(KB[b]||IN['t'+b])?1:0, l=LATCH[b]; LATCH[b]=0; IN[b+'P']=(v&&!IN['p'+b])||l?1:0; if(b==='a') IN.aR=(!v&&(IN.pa||l))?1:0; IN['p'+b]=v; IN[b]=v; }
 }
 // joystick
 (function(){
@@ -169,7 +173,7 @@ function pollInput(){
  joy.addEventListener('pointerup',end); joy.addEventListener('pointercancel',end);
  const bind=(el,k)=>{ el.addEventListener('pointerdown',e=>{ AU.init(); IN['t'+k]=1; LATCH[k]=1; if(k==='a'||k==='b') konamiPush(k); el.classList.add('on'); e.preventDefault(); });
   const off=()=>{IN['t'+k]=0; el.classList.remove('on');}; el.addEventListener('pointerup',off); el.addEventListener('pointerleave',off); el.addEventListener('pointercancel',off); };
- bind(document.getElementById('bA'),'a'); bind(document.getElementById('bB'),'b'); bind(document.getElementById('bC'),'c');
+ bind(document.getElementById('bA'),'a'); bind(document.getElementById('bJ'),'j'); bind(document.getElementById('bB'),'b'); bind(document.getElementById('bC'),'c');
  document.getElementById('bMenu').addEventListener('click',()=>{AU.init(); IN.tmClick=1;});
  document.getElementById('bPip').addEventListener('click',()=>{AU.init(); IN.tpClick=1;});
  document.getElementById('bMute').addEventListener('click',e=>{AU.init(); AU.setMute(!AU.muted); e.currentTarget.textContent=AU.muted?'♪̸':'♪'; e.currentTarget.classList.toggle('off',AU.muted);});
