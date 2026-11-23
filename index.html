@@ -9,8 +9,8 @@
 <style>
 /* VOICE: fiaba notturna, calda e un po' buffa
    IDEA: un vecchio lampione-cartolina: la console è una cornice di ottone attorno a una valle in miniatura
-   PICTURE: il gioco stesso, a tutto schermo, con luci dinamiche e lucciole
-   COLOUR and TYPE: viola notte #140e1c, ottone #c9a45a, lucciola #eaff8a; Fredoka
+   PICTURE: il gioco stesso, a tutto schermo, con luci dinamiche e lumini
+   COLOUR and TYPE: viola notte #140e1c, ottone #c9a45a, lumino #eaff8a; Fredoka
    LAYOUT: canvas centrato; su touch joystick a sinistra e pulsanti a destra, sotto in verticale */
 :root{color-scheme:dark;--bg:#0d0a14;--ink:#f5ecdc;--brass:#c9a45a;--fly:#eaff8a;--panel:#1b1326}
 *{box-sizing:border-box;min-width:0;-webkit-tap-highlight-color:transparent}
@@ -154,7 +154,7 @@ defRoom('ow:0,2',{name:'Radura dei Sussurri',music:'field',dark:0.15,
  "T.B.,.......,..T",
  "TTBB...,..B.TTTT",
  "TTTTTTT..TTTTTTT"],
- signs:["Radura dei Sussurri. Sull'isolotto riposa un cuore spezzato. Chi non ha ali, cerchi dei pali."]});
+ signs:["Radura dei Sussurri. Sull'isolotto riposa un cuore spezzato. Chi non ha ali, cerchi degli anelli."]});
 
 defRoom('ow:0,1',{name:'Bosco Muschiato',music:'field',dark:0.3,
  map:[
@@ -201,7 +201,7 @@ defRoom('ow:1,0',{name:'Abisso del Vento',music:'wind',dark:0.1,
  "R....,..O...RRRR",
  "R.......,...RRRR",
  "RRRRRRRPPRRRRRRR"],
- signs:["Chi vola senza ali, si aggrappa ai pali. — Ugo"]});
+ signs:["Chi vola senza ali, si aggancia agli anelli. — Ugo"]});
 
 defRoom('ow:2,0',{name:'Ai piedi del Campanile',music:'wind',dark:0.15,
  map:[
@@ -271,12 +271,12 @@ defRoom('ow:3,1',{name:'Cimitero dei Lampioni',music:'dark',dark:0.55,
  "Bug #404. Mai trovato.",
  "Ernesta, che disse: «Ma cosa vuoi che succeda se tocco la falena?»",
  "Qui riposa un salvataggio corrotto. Pace all'anima sua.",
- "Pippo il Primo, lucciola. Brillò poco, ma brillò bene.",
+ "Pippo il Primo, lumino. Brillò poco, ma brillò bene.",
  "Torno subito. — Il Fantasma",
  "Ha premuto il tasto sbagliato. Una volta sola.",
  "Il Cavaliere senza Pertica. Sfidò un cespuglio a mani nude. Perse.",
  "Anselmo. Amava i gatti. I gatti lo tolleravano.",
- "Rosalba la Fornaia. Il suo pane era duro, il suo cuore no.",
+ "Rosalba la Fornaia. Il suo pane era raffermo, il suo cuore no.",
  "Questa lapide è vuota. Per ora.",
  "Lampionaio Ignoto. Accese la luce per tutti, e nessuno ricorda il suo nome.",
  "Se stai leggendo questa lapide hai davvero troppo tempo libero. Ti vogliamo bene.",
@@ -485,7 +485,7 @@ defRoom('d2:1,3',{name:'Faro Sommerso',music:'water',dark:0.35,
  "#W____________W#",
  "#WW____E_____WW#",
  "################"],
- signs:["Diario del guardiano: «L'anguilla ama la luce. Quando la vedi brillare, afferrala.»"],
+ signs:["Diario del guardiano: «L'anguilla ama la luce. Quando la vedi brillare, agganciala.»"],
  warps:[{to:'ow:3,3',x:12,y:4}]});
 defRoom('d2:1,2',{name:'Faro Sommerso',music:'water',dark:0.35,
  map:[
@@ -684,7 +684,7 @@ const PAGE_SRC = {'tito':0,'ow:3,1':1,'ow:1,0':2,'frogs':3,'d1:2,1':4,'d3:1,1':5
 const ITEMS = {
  pertica:{name:'Pertica del Lampionaio',desc:'Lunga, robusta, profuma di fumo. Tieni premuto A e rilascia per un fendente rotante.'},
  lanterna:{name:'Lanterna di Orsola',desc:'Lancia una fiammata: brucia i rovi, accende le torce, illumina gli spettri.'},
- rampino:{name:'Rampino del Guardiano',desc:'Si aggancia ai pali e ti tira oltre i baratri. Stordisce i nemici e afferra gli oggetti.'},
+ rampino:{name:'Rampino del Guardiano',desc:'Si aggancia agli anelli e ti porta oltre i baratri. Stordisce i nemici e recupera gli oggetti.'},
  campana:{name:'Campana di Vetro',desc:'Il suo rintocco frantuma le pareti incrinate, stordisce i nemici e scambia i cristalli.'}
 };
 
@@ -702,7 +702,7 @@ const TROPHIES = [
  ['ricco','Ricco sfondato','Possiedi 250 conchiglie.'],
  ['intatto','Senza un graffio','Sconfiggi un boss senza subire danni.'],
  ['biblio','Archivista','Trova tutte le 6 pagine del diario.'],
- ['lucciole','Custode delle lucciole','Ritrova tutte le 24 lucciole.'],
+ ['lucciole','Custode dei lumini','Ritrova tutti i 24 lumini.'],
  ['fine','La notte è finita','Completa il gioco.'],
  ['cuore','Cuore intero','Ricomponi un cuore con 4 frammenti.']
 ];
@@ -1453,7 +1453,7 @@ const EDEF={
  // ---------- boss ----------
  muffa:{enemy:1,hp:6,r:26,col:'#d08cff',boss:1,noKb:1,invT:0.5,name:'MADRE MUFFA',sub:'Regina delle Spore',
   init(e){ e.boss=true; e.burn=0; e.cd=1.5; e.sum=4; e.hinted=0; },
-  onHit(e,dmg,src){ if(src.type==='fire'){ if(e.burn<=0){ e.burn=4.5; AU.sfx('burn'); burst(e.x,e.y-40,['#ff8a3c','#ffe08a'],20,150,3,'ember'); } return 'ignore'; } if(e.burn<=0){ if(!e.hinted){e.hinted=1; pipSay('La cappella è troppo dura! Prova con il fuoco!');} return 'block'; } return 1; },
+  onHit(e,dmg,src){ if(src.type==='fire'){ if(e.burn<=0){ e.burn=4.5; AU.sfx('burn'); burst(e.x,e.y-40,['#ff8a3c','#ffe08a'],20,150,3,'ember'); } return 'ignore'; } if(e.burn<=0){ if(!e.hinted){e.hinted=1; pipSay('Il cappello del fungo è troppo resistente! Prova con il fuoco!');} return 'block'; } return 1; },
   update(e,dt){ e.burn-=dt; e.cd-=dt; e.sum-=dt; e.x=8*TS+Math.sin(e.t*0.6)*90; e.y=3.8*TS;
    if(e.cd<=0){ e.cd=e.burn>0?2.4:1.6; const n=5, base=Math.atan2(P.y-e.y,P.x-e.x); for(let i=0;i<n;i++){ const a=base+(i-2)*0.28; projs.push({k:'spore',x:e.x,y:e.y-20,vx:Math.cos(a)*120,vy:Math.sin(a)*120,life:3,hostile:1,dmg:1}); } AU.tone(180,0.3,'sine',0.08,0.5); }
    if(e.sum<=0){ e.sum=6; if(ents.filter(x=>x.kind==='muffolo').length<3){ for(const s of [-1,1]){ const m=mkEnt('muffolo',e.x+s*30,e.y+20,{small:true}); m.hp=m.maxhp=1; m.r=7; ents.push(m);} burst(e.x,e.y,['#9be07a','#c49be0'],16,120); } } },
@@ -1625,7 +1625,7 @@ function collect(e){
  }
  save();
 }
-function gainFirefly(){ S.fireflies++; if(S.fireflies===1) setTimeout(()=>pipSay('Una lucciola persa! Ogni 6 che ritroviamo, un lampione di Brumafonda si riaccende.'),1200); AU.sfx('firefly'); floatText(P.x,P.y-44,`Lucciola ritrovata! ${S.fireflies}/${TOTAL_FIREFLIES}`,'#eaff8a'); burst(P.x,P.y-20,['#eaff8a','#fff'],16,90,2,'spark');
+function gainFirefly(){ S.fireflies++; if(S.fireflies===1) setTimeout(()=>pipSay('Un lumino perso! Ogni 6 che ritroviamo, un lampione di Brumafonda si riaccende.'),1200); AU.sfx('firefly'); floatText(P.x,P.y-44,`Lumino ritrovato! ${S.fireflies}/${TOTAL_FIREFLIES}`,'#eaff8a'); burst(P.x,P.y-20,['#eaff8a','#fff'],16,90,2,'spark');
  if([6,12,18,24].includes(S.fireflies)) setTimeout(()=>pipSay('Un lampione di Brumafonda si è appena acceso!'),900);
  if(S.fireflies>=TOTAL_FIREFLIES) award('lucciole'); }
 function gainPiece(){ S.pieces++; AU.sfx('item'); P.hold='piece'; const n=S.pieces%4;
@@ -1634,13 +1634,13 @@ function gainPiece(){ S.pieces++; AU.sfx('item'); P.hold='piece'; const n=S.piec
 function gainPage(i){ if(!S.pages.includes(i)) S.pages.push(i); AU.sfx('secret'); if(S.pages.length>=6) award('biblio');
  say([{paper:true,text:`Diario di Orsola — pagina ${i+1}\n\n${PAGES[i]}`}, `Pagine del diario: ${S.pages.length}/6.`]); }
 function giveItem(name){ S.items[name]=true; if(name!=='pertica') S.sel=name; AU.sfx('item'); P.hold=name;
- const tips={pertica:'Premi A (Spazio/J) per colpire. Tieni premuto e rilascia per il fendente rotante.',lanterna:'Equipaggiata nello slot B (tasto K). Prova sui rovi e sulle torce spente!',rampino:'Usalo con B (tasto K): punta un palo dall\'altra parte del baratro.',campana:'Suonala con B (tasto K). Cambia oggetto con il pulsante ⟳ (tasto Q).'};
+ const tips={pertica:'Premi A (Spazio/J) per colpire. Tieni premuto e rilascia per il fendente rotante.',lanterna:'Equipaggiata nello slot B (tasto K). Prova sui rovi e sulle torce spente!',rampino:'Usalo con B (tasto K): mira a un anello dall\'altra parte del baratro.',campana:'Suonala con B (tasto K). Cambia oggetto con il pulsante ⟳ (tasto Q).'};
  say([`Hai ottenuto: ${ITEMS[name].name}!`, ITEMS[name].desc, tips[name]],()=>{P.hold=null; save();}); }
 function award(id){ if(S.trophies[id]) return; S.trophies[id]=1; const t=TROPHIES.find(x=>x[0]===id); if(!t) return; toast(`🏆 Trofeo: ${t[1]}`); AU.sfx('secret'); save(); }
 let toastQ=[]; function toast(t){ toastQ.push({t,life:3.2}); }
 function pipSay(t){ pipMsg={text:t,life:3.6}; }
 let pipMsg=null;
-function onKonami(){ if(!S||mode==='title'){ pendingKonami=true; AU.sfx('secret'); const el=document.getElementById('logo'); el&&el.classList.add('rainbow'); return; } S.konami=true; award('konami'); AU.sfx('secret'); floatText(P.x,P.y-50,'Modalità Lucciola Arcobaleno!','#ffb3f0'); }
+function onKonami(){ if(!S||mode==='title'){ pendingKonami=true; AU.sfx('secret'); const el=document.getElementById('logo'); el&&el.classList.add('rainbow'); return; } S.konami=true; award('konami'); AU.sfx('secret'); floatText(P.x,P.y-50,'Modalità Arcobaleno!','#ffb3f0'); }
 let pendingKonami=false;
 
 // ---------- disegni condivisi ----------
@@ -1778,9 +1778,9 @@ const NPC={
     'Nonna Orsola: Senza Lanterna, la Notte Lunga scenderà su Brumafonda. E non se ne andrà più.',
     'Nonna Orsola: Prendi la mia vecchia Pertica da lampionaia. Serve ad accendere i lampioni... e a dare qualche bastonata, all\'occorrenza.',
     {fn:()=>giveItemQuiet('pertica')},
-    'Nonna Orsola: E porta con te Pip. È la lucciola più chiacchierona della valle, ma conosce ogni sentiero.',
-    'Pip: Ehi! «Chiacchierona» è una parola grossa. Io preferisco «ben informata».',
-    'Nonna Orsola: Anche le altre lucciole sono scappate quando la Lanterna si è spenta. Se le ritrovi, i lampioni del villaggio torneranno ad accendersi.',
+    'Nonna Orsola: E porta con te Pip. È il lumino più chiacchierone della valle, ma conosce ogni sentiero.',
+    'Pip: Ehi! «Chiacchierone» è un parolone. Io preferisco «ben informato».',
+    'Nonna Orsola: Anche gli altri lumini sono scappati quando la Lanterna si è spenta. Se li ritrovi, i lampioni del villaggio torneranno ad accendersi.',
     'Nonna Orsola: La prima Fiamma è nel Bosco Muschiato, dentro la Tana del Fungo. A nord-ovest, passando dal crocevia.',
     {fn:()=>{S.flags.intro=1; award('primo'); save();}}]; }
    if(S.flames>=3) return ['Nonna Orsola: Le tre Fiamme... ce l\'hai fatta, Ilio.','Nonna Orsola: Quella falena. Temo di sapere chi sia. Se lo incontri nel Nido... prova a parlargli, prima di colpirlo.','Nonna Orsola: Il Nido è a nord-est, oltre il Campanile.'];
@@ -1796,30 +1796,30 @@ const NPC={
  tito:{name:'Tito',look:{skin:'#f2c79b',hair:'#e0a040',hairStyle:'spiky',body:'#e07a2e',hat:'cap',hatc:'#3a6ad0',size:0.82,pants:'#3a4a7a'},
   talk(){ if(!S.flags.titoPage){ return ['Tito: Ilio! Ho trovato questo foglio vicino alla casa della nonna. Sembra il suo diario!', {fn:()=>{S.flags.titoPage=1; gainPage(0);}}]; }
    S.flags.tito=(S.flags.tito||0)+1;
-   return [pick(['Tito: Lo sai che le lucciole perse si nascondono nei posti più strani? Una volta ne ho vista una dentro una tana di fungo!','Tito: Facciamo a nascondino? Conto fino a cento... uno... due... ehi, non vale correre via!','Tito: Da grande voglio fare il lampionaio. O il gatto. Ancora non ho deciso.','Tito: Ho sentito che sulla tomba del cimitero c\'è scritto un numero. Quattrocentoquattro. Che vorrà dire?'])]; }},
+   return [pick(['Tito: Lo sai che i lumini persi si nascondono nei posti più strani? Una volta ne ho visto uno dentro una tana di fungo!','Tito: Facciamo a nascondino? Conto fino a cento... uno... due... ehi, non vale correre via!','Tito: Da grande voglio fare il lampionaio. O il gatto. Ancora non ho deciso.','Tito: Ho sentito che sulla tomba del cimitero c\'è scritto un numero. Quattrocentoquattro. Che vorrà dire?'])]; }},
  ugo:{name:'Ugo il Viandante',look:{skin:'#d8a47a',hair:'#3a2a20',body:'#7a6a4a',belt:'#4a3020',beard:'#4a3a2a',hat:'wide',hatc:'#6a4a30',pack:1,cape:'#5a4a3a'},
-  talk(){ if(S.items.rampino) return ['Ugo: Un rampino! Ora sì che si vola. Più o meno.','Ugo: Nell\'abisso, punta il palo dall\'altra parte e lascia fare alla corda.'];
+  talk(){ if(S.items.rampino) return ['Ugo: Un rampino! Ora sì che si vola. Più o meno.','Ugo: Nell\'abisso, mira all\'anello dall\'altra parte e lascia fare alla corda.'];
    return ['Ugo: Sono Ugo, viandante di professione e di vocazione.','Ugo: A nord c\'è l\'Abisso del Vento. Nessuno lo attraversa senza un rampino.','Ugo: Si dice che il guardiano del Faro Sommerso ne avesse uno. Peccato che il faro sia sott\'acqua da cent\'anni.']; }},
  fausto:{name:'Mugnaio Fausto',look:{skin:'#efc9a8',hair:'#c9c0b0',body:'#d8c8a0',apron:'#f4ece0',hat:'wide',hatc:'#e0c070',beard:'#f0ece4',pants:'#6a5a4a'},
   talk(){ if(S.items.lanterna&&!S.flags.fausto){ return ['Fausto: Hai la lanterna di Orsola! Allora sei tu che brucerai quei rovi.','Fausto: Tieni, trenta conchiglie per il viaggio. Non spenderle tutte da Ciottolo, è un usuraio con il guscio.',{fn:()=>{S.flags.fausto=1; S.shells+=30; AU.sfx('coin'); floatText(P.x,P.y-40,'+30 conchiglie','#ffb3c7');}}]; }
    return [pick(['Fausto: Il mulino gira anche senza vento. Non chiedermi come: segreto di famiglia.','Fausto: I rovi a est sono cresciuti in una sola notte, quando la Lanterna si è spenta. Solo il fuoco li ferma.','Fausto: Sai qual è il colmo per un mugnaio? Avere un cuore di farina... no, aspetta, non era così.'])]; }},
  barnaba:{name:'Barnaba il Pescatore',look:{skin:'#d89a72',hair:'#5a4a3a',body:'#e8c03a',hat:'hood',hatc:'#e8c03a',beard:'#9a8a7a',pants:'#2a3a5a',boots:'#2a2a2a'},
-  talk(){ return ['Barnaba: Il Faro Sommerso... una volta guidava le barche. Ora guida solo i pesci.','Barnaba: Laggiù vive un\'anguilla di rame, grossa come un tronco. Ha un lume sulla testa: chi lo afferra, la trascina fuori dall\'acqua.','Barnaba: Io? No no. Io pesco sardine. Le sardine non ti mangiano.']; }},
+  talk(){ return ['Barnaba: Il Faro Sommerso... una volta guidava le barche. Ora guida solo i pesci.','Barnaba: Laggiù vive un\'anguilla di rame, lunga come una barca. Ha un lume sulla testa: se lo agganci col rampino, finisce dritta sulla riva.','Barnaba: Io? No no. Io pesco sardine. Le sardine non ti mangiano.']; }},
  marinella:{name:'Marinella',look:{skin:'#f2c79b',hair:'#3a2216',hairStyle:'braids',body:'#3f8fd0',collar:'#ffffff',size:0.86,pants:'#f2c79b',boots:'#c84a4a'},
-  talk(){ return [pick(['Marinella: Raccolgo conchiglie! E tu cosa raccogli?',`Marinella: Lucciole? Ne hai già ${S.fireflies}! Io ne ho una sola, ma è un sasso che brilla.`,'Marinella: Se avvicini una conchiglia all\'orecchio senti il mare. Se avvicini Pip, senti Pip.','Marinella: Il faro laggiù è vuoto da tantissimo. Però di notte qualcosa dentro brilla. Io non ci entro!'])]; }},
+  talk(){ return [pick(['Marinella: Raccolgo conchiglie! E tu cosa raccogli?',`Marinella: Lumini? Ne hai già ${S.fireflies}! Io ne ho uno solo, ma è un sasso che brilla.`,'Marinella: Se avvicini una conchiglia all\'orecchio senti il mare. Se avvicini Pip, senti Pip.','Marinella: Il faro laggiù è vuoto da tantissimo. Però di notte qualcosa dentro brilla. Io non ci entro!'])]; }},
  ciottolo:{name:'Ciottolo',look:{turtle:1},
   talk(){ S.stats.ciottolo++;
    if(S.stats.ciottolo===6) return ['Ciottolo: Ho trecentododici anni, sai? Il segreto è non correre mai.','Ciottolo: E non fare mai debiti con una tartaruga. Abbiamo molta, molta pazienza.',{fn:openShop}];
    return ['Ciottolo: Benvenuto nella bottega più lenta della valle. Ma anche la più onesta. Più o meno.',{fn:openShop}]; }},
  ortica:{name:'Strega Ortica',look:{skin:'#b8c9a0',hair:'#5a6a5a',hairStyle:'long',body:'#4a5a4a',hat:'witch',hatc:'#2e3a2e',nose:1,cape:'#2e3a2e',pants:'#2a2a2a'},
-  talk(){ if(S.pages.length>=3&&!S.flags.ortica) return ['Ortica: Eh eh... vedo che hai raccolto le pagine della vecchia Orsola.','Ortica: Tieni questa lucciola. L\'ho trovata impigliata nella mia scopa. Mi faceva il solletico.',{fn:()=>{S.flags.ortica=1; gainFirefly(); save();}}];
+  talk(){ if(S.pages.length>=3&&!S.flags.ortica) return ['Ortica: Eh eh... vedo che hai raccolto le pagine della vecchia Orsola.','Ortica: Tieni questo lumino. L\'ho trovato tra le mie erbe medicinali. Mi faceva il solletico.',{fn:()=>{S.flags.ortica=1; gainFirefly(); save();}}];
    return ['Ortica: Eh eh... un lampionaio nella mia palude.','Ortica: La falena che cerchi un tempo aveva un nome. Lo trovi scritto nelle pagine perdute di Orsola.', S.pages.length<3?`Ortica: Portami la prova di averne lette almeno tre, e ti darò qualcosa che brilla. Ne hai lette ${S.pages.length}.`:'Ortica: Il buio non è un nemico, ragazzo. È solo la luce che si riposa.']; }}
 };
 function giveItemQuiet(n){ S.items[n]=true; AU.sfx('item'); P.hold=n; setTimeout(()=>{ if(P) P.hold=null; },1400); floatText(P.x,P.y-50,'Pertica del Lampionaio!','#ffe08a'); }
 
-const CAT_LINES=['Il gatto ti guarda. Miao.','Il gatto sbadiglia con aria di superiorità.','Il gatto si gira dall\'altra parte.','Bricco: «Mrrr.»','Il gatto si lecca una zampa. Sembra pensieroso.','Il gatto finge di non conoscerti.','Bricco ti osserva. Forse sta per dire qualcosa.','Il gatto si stiracchia. Molto lentamente.','Bricco: «...miao?»'];
+const CAT_LINES=['Il gatto ti guarda. Miao.','Il gatto sbadiglia con aria di superiorità.','Il gatto si gira dall\'altra parte.','Bricco: «Mrrr.»','Il gatto si pulisce una zampa. Sembra pensieroso.','Il gatto finge di non conoscerti.','Bricco ti osserva. Forse sta per dire qualcosa.','Il gatto si stiracchia. Molto lentamente.','Bricco: «...miao?»'];
 function talkCat(){ S.stats.cat++; AU.sfx('meow');
- if(S.stats.cat===10){ award('gatto'); return ['Il gatto si avvicina e ti sussurra all\'orecchio:','Bricco: «Su, su, giù, giù, sinistra, destra, sinistra, destra, B, A.»','Poi si lecca una zampa come se niente fosse. Sotto di lui c\'era una lucciola addormentata!',{fn:()=>{ if(!S.flags.cat){ S.flags.cat=1; gainFirefly(); save(); } }}]; }
+ if(S.stats.cat===10){ award('gatto'); return ['Il gatto si avvicina e ti sussurra all\'orecchio:','Bricco: «Su, su, giù, giù, sinistra, destra, sinistra, destra, B, A.»','Poi si pulisce una zampa come se niente fosse. Sotto di lui c\'era un lumino addormentato!',{fn:()=>{ if(!S.flags.cat){ S.flags.cat=1; gainFirefly(); save(); } }}]; }
  if(S.stats.cat>10) return [pick(['Bricco fa le fusa. Avete un segreto in comune, ora.','Bricco ti ignora. Ha già detto tutto quello che doveva.'])];
  return [CAT_LINES[(S.stats.cat-1)%CAT_LINES.length]]; }
 
@@ -1828,7 +1828,7 @@ function frogSing(e){
  addPart({x:e.x,y:e.y-26,vx:rand(-10,10),vy:-30,life:1,col:'#fff',size:9,type:'note'});
  const seq=S.stats.frogseq; seq.push(e.col); while(seq.length>4) seq.shift();
  if(seq.join()==='rossa,verde,gialla,blu'&&!S.flags.frogs){ S.flags.frogs=1; award('rane');
-  setTimeout(()=>{ AU.sfx('secret'); say(['Le rane cantano in coro, tutte insieme! Il lago brilla per un istante.','Dal fondo dello stagno affiora una lucciola... e un foglio di carta asciutto, per miracolo.',{fn:()=>{ gainFirefly(); }},{fn:()=>gainPage(3)}]); },600); }
+  setTimeout(()=>{ AU.sfx('secret'); say(['Le rane cantano in coro, tutte insieme! Il lago brilla per un istante.','Dal fondo dello stagno affiora un lumino... e un foglio di carta asciutto, per miracolo.',{fn:()=>{ gainFirefly(); }},{fn:()=>gainPage(3)}]); },600); }
 }
 
 // ---------- suggerimenti di Pip ----------
@@ -1839,13 +1839,13 @@ function pipHint(){
  else if(!it.lanterna) h='La Tana del Fungo è nel Bosco Muschiato: dal villaggio vai a nord fino al crocevia, poi a ovest.';
  else if(!S.flags.flame0) h='Hai la lanterna! Con il tasto B brucia i rovi e accendi le torce. Nella tana c\'è una stanza buia con quattro torce...';
  else if(!it.rampino) h='I rovi a est del villaggio e vicino alla bottega ora possono bruciare! Il Faro Sommerso è in fondo alla spiaggia, a sud-est.';
- else if(!S.flags.flame1) h='Usa il rampino sui pali: ti tira dall\'altra parte dei baratri. E l\'anguilla... ha un lume sulla testa, no?';
+ else if(!S.flags.flame1) h='Usa il rampino sugli anelli: ti porta dall\'altra parte dei baratri. E l\'anguilla... ha un lume sulla testa, no?';
  else if(!it.campana) h='L\'Abisso del Vento è a nord del crocevia. Oltre, il Campanile: accendi le sue torce per aprire la porta.';
  else if(!S.flags.flame2) h='La campana frantuma le pareti incrinate e scambia i cristalli arancioni e blu. Il gufo? Suona quando i suoi occhi diventano rossi!';
  else if(S.flames>=3&&!S.flags.done) h='Il Nido della Falena è a est del Campanile. Il sigillo si aprirà davanti alle tre Fiamme. Servirà tutto quello che hai imparato.';
  else h='Abbiamo salvato Brumafonda! Ma ci sono ancora segreti in giro...';
  const extra=[];
- if(S.fireflies<TOTAL_FIREFLIES) extra.push(`Lucciole ritrovate: ${S.fireflies}/${TOTAL_FIREFLIES}. Alcune si nascondono dietro rovi, rocce incrinate o... nei favori che fai alla gente.`);
+ if(S.fireflies<TOTAL_FIREFLIES) extra.push(`Lumini ritrovati: ${S.fireflies}/${TOTAL_FIREFLIES}. Alcune si nascondono dietro rovi, rocce incrinate o... nei favori che fai alla gente.`);
  if(S.pages.length<6) extra.push(`Pagine del diario: ${S.pages.length}/6. La Strega Ortica, nella palude a sud-ovest, è curiosa di sapere cosa c'è scritto.`);
  if(S.pieces<4) extra.push('I Frammenti di Cuore sono spesso su isolotti o dietro pareti incrinate. Ciottolo ne vende uno.');
  if(!S.trophies.gatto) extra.push('Bricco, il gatto del villaggio, sembra sempre sul punto di dire qualcosa. Forse basta insistere.');
@@ -1853,14 +1853,14 @@ function pipHint(){
  const lines=['Pip: Il nostro obiettivo: '+curObjective().t+'.','Pip: '+h]; if(extra.length&&Math.random()<0.8) lines.push('Pip: '+pick(extra));
  return lines;
 }
-const PIP_IDLE=['Che bel posto per una lucciola!','Ilio, hai mai pensato di tagliare TUTTI i cespugli? Così, per scienza.','Ho freddo alle ali. Scherzo, sono una lucciola: sono sempre accesa.','Lo sapevi che le falene sono attratte dalla luce? Brrr.','Se ti perdi, premi ✦ e chiedi a me!','Le lapidi del cimitero dicono cose buffe. Lo so, le ho lette tutte. Due volte.'];
+const PIP_IDLE=['Che bel posto per un lumino!','Ilio, hai mai pensato di tagliare TUTTI i cespugli? Così, per scienza.','Ho freddo alle ali. Scherzo, sono un lumino: sono sempre acceso.','Lo sapevi che le falene sono attratte dalla luce? Brrr.','Se ti perdi, premi ✦ e chiedi a me!','Le lapidi del cimitero dicono cose buffe. Lo so, le ho lette tutte. Due volte.'];
 
 // ---------- negozio ----------
 const SHOP=[
  {id:'pozione',name:'Pozione di Brace',desc:'Ricarica tutti i cuori.',price:15,ok:()=>S.hp<S.maxhp,buy:()=>{S.hp=S.maxhp;}},
  {id:'cuore',name:'Frammento di Cuore',desc:'Un quarto di cuore, un po\' ammaccato.',price:60,once:1,buy:()=>{ closeShop(); gainPiece(); }},
- {id:'barattolo',name:'Lucciola in barattolo',desc:'«L\'ho trovata nel mio guscio. Non chiedere.»',price:45,once:1,buy:()=>{ closeShop(); gainFirefly(); }},
- {id:'bussola',name:'Bussola delle Lucciole',desc:'Mostra sulla mappa le stanze con lucciole ancora da trovare.',price:40,once:1,buy:()=>{ S.flags.bussola=1; }}
+ {id:'barattolo',name:'Lumino in barattolo',desc:'«L\'ho trovata nel mio guscio. Non chiedere.»',price:45,once:1,buy:()=>{ closeShop(); gainFirefly(); }},
+ {id:'bussola',name:'Bussola dei Lumini',desc:'Mostra sulla mappa le stanze con lumini ancora da trovare.',price:40,once:1,buy:()=>{ S.flags.bussola=1; }}
 ];
 // ===================== GUIDA: OBIETTIVI, FRECCIA, DIARIO DELLE MISSIONI =====================
 const QUESTS=[
@@ -1889,10 +1889,10 @@ function curObjective(){
   return it.campana?{t:'Torna nel Campanile e sconfiggi il Gufo d\'Ottone',room:'ow:2,0',tile:[7,3]}:{t:'Attraversa l\'Abisso del Vento col rampino e accendi le due torce del Campanile',room:'ow:2,0',tile:[7,3]};
  }
  if(!f.done){
-  if(w==='fn') return {t:'Nido della Falena: brucia i rovi, aggrappati al palo e rompi la parete con la campana'};
+  if(w==='fn') return {t:'Nido della Falena: brucia i rovi, agganciati all\'anello e rompi la parete con la campana'};
   return {t:'Entra nel Nido della Falena, a est del Campanile',room:'ow:3,0',tile:[7,1]};
  }
- if(S.fireflies<TOTAL_FIREFLIES) return {t:`Ritrova le lucciole mancanti (${S.fireflies}/${TOTAL_FIREFLIES}) per il finale vero`};
+ if(S.fireflies<TOTAL_FIREFLIES) return {t:`Ritrova i lumini mancanti (${S.fireflies}/${TOTAL_FIREFLIES}) per il finale vero`};
  return {t:'Hai completato tutto. Grazie per aver giocato!'};
 }
 // grafo delle stanze del mondo esterno (bordi percorribili)
@@ -2229,17 +2229,17 @@ function startEnding(){
  const lines=tru?[
   'Cenerale cade a terra. Le sue ali tremano come foglie secche.',
   {fn:()=>{ for(let i=0;i<24;i++) setTimeout(()=>{ ents.push(mkEnt('firefly',P.x+rand(-150,150),P.y+rand(-120,40),{gid:'end'+i,deco:1})); AU.tone(880*2**(((rand(0,12))|0)/12),0.3,'sine',0.05); },i*80); }},
-  'Le ventiquattro lucciole che hai ritrovato si alzano dal tuo zaino e gli volano intorno, piano.',
+  'I ventiquattro lumini che hai ritrovato si alzano dal tuo zaino e gli volano intorno, piano.',
   'Cenerale: Così... tante luci. E nessuna chiusa in una stanza.',
   'Pip: Non devi tenerla stretta, la luce. Basta stare vicini.',
   'Una voce lontana, che sa di pane e di fumo: «Torna a casa, piccolo.»',
-  'La cenere scivola via dalle sue ali. Sotto, c\'è una lucciola minuscola, un po\' spaventata.',
-  'Cenerale: ...posso venire con voi?'
+  'La cenere scivola via dalle sue ali. Sotto, c\'è un lumino minuscolo, un po\' spaventato.',
+  'Cenerale: ...posso restare con voi?'
  ]:[
   'Cenerale cade a terra. Le sue ali si sbriciolano in cenere grigia.',
   'Cenerale: Fa... così buio...',
   'Le tre Fiamme si alzano in volo verso Brumafonda.',
-  'Pip: Ilio... mi sembra che mancasse qualcosa. Se avessimo ritrovato tutte le lucciole, forse...'
+  'Pip: Ilio... mi sembra che mancasse qualcosa. Se avessimo ritrovato tutti i lumini, forse...'
  ];
  say(lines,()=>{ mode='ending'; END={t:0,tru,scroll:0}; AU.setMusic('title'); });
 }
@@ -2496,15 +2496,15 @@ function renderEnding(g){
  show(END.tru?'La notte è finita.':'La Lanterna arde di nuovo.',70,30,'#fff3d0',0.5);
  show(END.tru?'Brumafonda ha ritrovato la sua luce... e un nuovo amico.':'Ma da qualche parte, una piccola ombra ha ancora paura del buio.',100,14,'#f0e0ff',1.5);
  const m=Math.floor(S.stats.time/60), s=Math.floor(S.stats.time%60);
- const rows=[`Tempo di gioco: ${m}m ${String(s).padStart(2,'0')}s`,`Lucciole: ${S.fireflies}/${TOTAL_FIREFLIES}`,`Pagine del diario: ${S.pages.length}/6`,`Frammenti di cuore: ${S.pieces}/4`,`Trofei: ${Object.keys(S.trophies).length}/${TROPHIES.length}`,`Nemici sconfitti: ${S.stats.kills}   ·   Cadute: ${S.stats.falls}`];
+ const rows=[`Tempo di gioco: ${m}m ${String(s).padStart(2,'0')}s`,`Lumini: ${S.fireflies}/${TOTAL_FIREFLIES}`,`Pagine del diario: ${S.pages.length}/6`,`Frammenti di cuore: ${S.pieces}/4`,`Trofei: ${Object.keys(S.trophies).length}/${TROPHIES.length}`,`Nemici sconfitti: ${S.stats.kills}   ·   Cadute: ${S.stats.falls}`];
  rows.forEach((r,i)=>show(r,145+i*22,15,'#ffe9d6',3+i*0.4));
- show(END.tru?'FINALE VERO':'Ritrova tutte le lucciole per il finale vero.',288,13,END.tru?'#eaff8a':'#cdbfe0',6);
+ show(END.tru?'FINALE VERO':'Ritrova tutti i lumini per il finale vero.',288,13,END.tru?'#eaff8a':'#cdbfe0',6);
  if(t>4&&Math.sin(T*4)>0) show('Premi A per tornare al titolo',GH-24,13,'#ffcf6b',4);
 }
 // ===================== INTERFACCIA HTML =====================
 const $=id=>document.getElementById(id);
 let menuOpen=false, shopOpen=false, menuTab='missione';
-function showTitle(){ $('title').classList.remove('hidden'); mode='title'; AU.setMusic('title'); const s=loadSave(); $('btnCont').disabled=!s; $('btnCont').textContent=s?`Continua  ·  ${s.fireflies||0}/${TOTAL_FIREFLIES} lucciole`:'Continua'; }
+function showTitle(){ $('title').classList.remove('hidden'); mode='title'; AU.setMusic('title'); const s=loadSave(); $('btnCont').disabled=!s; $('btnCont').textContent=s?`Continua  ·  ${s.fireflies||0}/${TOTAL_FIREFLIES} lumini`:'Continua'; }
 function startGame(cont){
  AU.init(); S=cont&&loadSave()||newState(); if(!S.stats.frogseq) S.stats.frogseq=[];
  $('title').classList.add('hidden');
@@ -2552,12 +2552,12 @@ function renderMenu(){
   for(let y=0;y<=my;y++) for(let x=0;x<=mx;x++){ const k=w+':'+x+','+y, r=ROOMS[k]; if(!r){ h+='<div class="mc none"></div>'; continue; }
    const vis=S.visited[k], here=room.key===k; let ff=0; if(S.flags.bussola){ r.map.forEach((row,yy)=>[...row].forEach((c,xx)=>{ if(c==='f'&&!S.got[k+'|f|'+xx+','+yy]) ff++; })); }
    h+=`<div class="mc ${vis?'vis':''} ${here?'here':''} ${r.boss?'boss':''}"><span>${vis?esc(r.name):'?'}</span>${ff?`<i>✦${ff}</i>`:''}${here?'<em>●</em>':''}</div>`; }
-  h+='</div>'; h+=`<p class="hint">${S.flags.bussola?'✦ = lucciole ancora nascoste in quella zona.':'La Bussola delle Lucciole di Ciottolo mostrerebbe dove si nascondono le lucciole.'}</p>`;
+  h+='</div>'; h+=`<p class="hint">${S.flags.bussola?'✦ = lumini ancora nascosti in quella zona.':'La Bussola dei Lumini di Ciottolo mostrerebbe dove si nascondono i lumini.'}</p>`;
  }
  if(menuTab==='collezione'){
   const m=Math.floor(S.stats.time/60);
-  h+=`<div class="stats"><div><img src="${iconCanvas('firefly')}"><b>${S.fireflies}/${TOTAL_FIREFLIES}</b><span>Lucciole</span></div><div><img src="${iconCanvas('piece')}"><b>${S.pieces%4}/4</b><span>Frammenti (tot. ${S.pieces})</span></div><div><img src="${iconCanvas('shell')}"><b>${S.shells}</b><span>Conchiglie</span></div><div><b class="big">${S.pages.length}/6</b><span>Pagine</span></div><div><b class="big">${m} min</b><span>Tempo</span></div><div><b class="big">${S.stats.kills}</b><span>Nemici</span></div></div>`;
-  h+=`<h4>Lampioni di Brumafonda</h4><div class="row">${[6,12,18,24].map(n=>`<div class="pill ${S.fireflies>=n?'':'off'}">${S.fireflies>=n?'💡':'○'} ${n} lucciole</div>`).join('')}</div>`;
+  h+=`<div class="stats"><div><img src="${iconCanvas('firefly')}"><b>${S.fireflies}/${TOTAL_FIREFLIES}</b><span>Lumini</span></div><div><img src="${iconCanvas('piece')}"><b>${S.pieces%4}/4</b><span>Frammenti (tot. ${S.pieces})</span></div><div><img src="${iconCanvas('shell')}"><b>${S.shells}</b><span>Conchiglie</span></div><div><b class="big">${S.pages.length}/6</b><span>Pagine</span></div><div><b class="big">${m} min</b><span>Tempo</span></div><div><b class="big">${S.stats.kills}</b><span>Nemici</span></div></div>`;
+  h+=`<h4>Lampioni di Brumafonda</h4><div class="row">${[6,12,18,24].map(n=>`<div class="pill ${S.fireflies>=n?'':'off'}">${S.fireflies>=n?'💡':'○'} ${n} lumini</div>`).join('')}</div>`;
  }
  if(menuTab==='diario'){
   if(!S.pages.length) h+='<p class="hint">Nessuna pagina trovata. Il diario di Nonna Orsola è sparso per la valle.</p>';
