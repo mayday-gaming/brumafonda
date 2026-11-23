@@ -27,11 +27,13 @@ body.portrait.touch #stage{padding-top:60px;bottom:230px;align-items:center}
 body.touch #touch{display:block}
 #joy{position:fixed;left:24px;bottom:28px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.08),rgba(255,255,255,.03));border:2px solid rgba(201,164,90,.45);touch-action:none;z-index:4}
 #knob{position:absolute;left:45px;top:45px;width:50px;height:50px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ffe9b0,#c9a45a);box-shadow:0 4px 12px rgba(0,0,0,.5)}
-#btns{position:fixed;right:20px;bottom:24px;width:180px;height:160px;z-index:4}
+#btns{position:fixed;right:20px;bottom:24px;width:180px;height:196px;z-index:4}
 #btns button{position:absolute;border-radius:50%;border:2px solid rgba(0,0,0,.4);font:700 22px Fredoka,sans-serif;color:#1d1428;touch-action:none;box-shadow:0 5px 0 rgba(0,0,0,.4),0 8px 20px rgba(0,0,0,.4)}
 #btns button.on{transform:translateY(3px);box-shadow:0 2px 0 rgba(0,0,0,.4)}
 #bA{right:0;bottom:44px;width:78px;height:78px;background:radial-gradient(circle at 35% 30%,#fff1c2,#ffb84a)}
 #bB{right:88px;bottom:4px;width:68px;height:68px;background:radial-gradient(circle at 35% 30%,#d9f0ff,#5fb0e8)}
+#bJ{right:8px;bottom:132px;width:54px;height:54px;font-size:22px!important;background:radial-gradient(circle at 35% 30%,#e6ffd8,#6ad06a);display:none}
+body.canjump #bJ{display:block}
 #bC{right:100px;bottom:96px;width:48px;height:48px;font-size:18px!important;background:radial-gradient(circle at 35% 30%,#efe2ff,#a985e0)}
 body.touch:not(.portrait) #joy{left:max(18px,env(safe-area-inset-left));bottom:30px}
 .ov{position:fixed;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;padding:16px}
@@ -105,12 +107,12 @@ table.keys td{border-bottom:1px solid rgba(238,241,255,.2)!important}table.keys 
 <body>
 <div id="stage"><canvas id="cv" aria-label="Schermo di gioco"></canvas></div>
 <div id="topbar"><button id="bMute" aria-label="Audio">♪</button><button id="bPip" aria-label="Chiedi a Pip">✦</button><button id="bMenu" aria-label="Menu">☰</button></div>
-<div id="touch"><div id="joy"><div id="knob"></div></div><div id="btns"><button id="bC" aria-label="Cambia oggetto">⟳</button><button id="bB">B</button><button id="bA">A</button></div></div>
+<div id="touch"><div id="joy"><div id="knob"></div></div><div id="btns"><button id="bC" aria-label="Cambia oggetto">⟳</button><button id="bJ" aria-label="Salta">⤒</button><button id="bB">B</button><button id="bA">A</button></div></div>
 
 <div id="title" class="ov">
  <div id="logo" title=""><small>Ilio, Pip e la notte senza fine</small><h1>La Lanterna<br>di Brumafonda</h1></div>
  <div class="tbtns"><button class="btn main" id="btnNew">Nuova avventura</button><button class="btn" id="btnCont" disabled>Continua</button></div>
- <p class="tnote">Frecce/WASD per muoverti · Spazio = A · K = B · Q cambia oggetto · P chiede a Pip · Esc menu. Su telefono usa i comandi a schermo.</p>
+ <p class="tnote">Frecce/WASD per muoverti · Spazio = A · K = B · Q cambia oggetto · Maiusc salta · P chiede a Pip · Esc menu. Su telefono usa i comandi a schermo.</p>
 </div>
 <div id="confirm" class="ov hidden"><div class="panel"><b>Iniziare una nuova avventura?</b><span style="color:#cdbfe0;font-size:14px">Il salvataggio attuale verrà cancellato.</span><div class="row" style="justify-content:center"><button class="btn" id="cNo">Annulla</button><button class="btn main" id="cYes">Ricomincia</button></div></div></div>
 <div id="menu" class="ov hidden"><div class="panel"><div class="ph"><h3>Zaino di Ilio</h3><button class="btn" id="menuClose">Chiudi</button></div>

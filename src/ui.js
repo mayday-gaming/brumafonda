@@ -6,6 +6,7 @@ function startGame(cont){
  AU.init(); S=cont&&loadSave()||newState(); if(!S.stats.frogseq) S.stats.frogseq=[];
  $('title').classList.add('hidden');
  P=mkPlayer(S.px,S.py); pip=null; room=null; parts=[]; floaters=[]; banner=null; bossRef=null;
+ document.body.classList.toggle('canjump',!!S.items.stivali);
  enterRoom(S.world+':'+S.rx+','+S.ry); mode='play';
  if(pendingKonami){ pendingKonami=false; S.konami=true; award('konami'); }
  if(!S.flags.intro&&!cont){ say(['C\'era una volta, in una valle avvolta dalla nebbia, un villaggio chiamato Brumafonda.',
@@ -35,16 +36,17 @@ function renderMenu(){
  if(menuTab==='missione'){
   h+=`<h4>Obiettivo attuale</h4><div class="page" style="background:rgba(255,224,138,.15);color:#fff;font-family:Fredoka,sans-serif">★ ${esc(curObjective().t)}</div><h4>Diario delle missioni</h4>`;
   let cur=false; for(const q of QUESTS){ const d=q.done(); const now=!d&&!cur; if(now) cur=true; h+=`<div class="pill ${d||now?'':'off'}" style="margin-bottom:6px;font-size:14px">${d?'✓':now?'▶':'○'} ${esc(now||d?q.t:'???')}</div>`; }
-  h+=`<p class="hint">Premi ✦ (o P) durante il gioco per un consiglio di Pip.</p>`;
+  h+='<h4>Missioni secondarie</h4>'; for(const q of SIDE_QUESTS){ const st=q.st(); h+=`<div class="pill ${st?'':'off'}" style="margin-bottom:6px;font-size:14px">${st===2?'✓':st===1?'▶':'○'} ${esc(st?q.t:'???')}${st===1?' · '+esc(q.info()):''}</div>`; }
+  h+=`<p class="hint">Premi ✦ (o P) durante il gioco per un consiglio di Pip. Salta con Maiusc / L (o ⤒) quando avrai gli stivali.</p>`;
  }
  if(menuTab==='zaino'){
-  h+='<div class="grid">'; for(const k of ['pertica','lanterna','rampino','campana']){ const has=S.items[k]; h+=`<div class="card ${has?'':'locked'} ${S.sel===k?'sel':''}" data-it="${k}"><img src="${has?iconCanvas(k):''}" alt=""><b>${has?esc(ITEMS[k].name):'???'}</b><span>${has?esc(ITEMS[k].desc):'Non ancora trovato.'}</span></div>`; } h+='</div>';
+  h+='<div class="grid">'; for(const k of ['pertica','lanterna','rampino','campana','stivali']){ const has=S.items[k]; h+=`<div class="card ${has?'':'locked'} ${S.sel===k?'sel':''}" data-it="${k}"><img src="${has?iconCanvas(k):''}" alt=""><b>${has?esc(ITEMS[k].name):'???'}</b><span>${has?esc(ITEMS[k].desc):'Non ancora trovato.'}</span></div>`; } h+='</div>';
   const fn=['Fiamma del Bosco','Fiamma del Mare','Fiamma del Vento']; h+='<h4>Fiamme della Grande Lanterna</h4><div class="row">'; fn.forEach((n,i)=>{ h+=`<div class="pill ${S.flags['flame'+i]?'':'off'}">${S.flags['flame'+i]?'<img src="'+iconCanvas('flame'+i,28)+'">':''}${n}</div>`; }); h+='</div>';
   h+=`<p class="hint">Tocca un oggetto per assegnarlo al tasto B.</p>`;
  }
  if(menuTab==='mappa'){
   const w=room.w, keys=Object.keys(ROOMS).filter(k=>k.startsWith(w+':')); let mx=0,my=0; keys.forEach(k=>{ const [x,y]=k.split(':')[1].split(',').map(Number); mx=Math.max(mx,x); my=Math.max(my,y); });
-  const names={ow:'Valle di Brumafonda',d1:'Tana del Fungo',d2:'Faro Sommerso',d3:'Campanile Spezzato',fn:'Nido della Falena'};
+  const names={ow:'Valle di Brumafonda',d1:'Tana del Fungo',d2:'Faro Sommerso',d3:'Campanile Spezzato',d4:'Serra di Vetro',fn:'Nido della Falena'};
   h+=`<h4>${names[w]}</h4><div class="map" style="grid-template-columns:repeat(${mx+1},1fr)">`;
   for(let y=0;y<=my;y++) for(let x=0;x<=mx;x++){ const k=w+':'+x+','+y, r=ROOMS[k]; if(!r){ h+='<div class="mc none"></div>'; continue; }
    const vis=S.visited[k], here=room.key===k; let ff=0; if(S.flags.bussola){ r.map.forEach((row,yy)=>[...row].forEach((c,xx)=>{ if(c==='f'&&!S.got[k+'|f|'+xx+','+yy]) ff++; })); }
@@ -53,7 +55,7 @@ function renderMenu(){
  }
  if(menuTab==='collezione'){
   const m=Math.floor(S.stats.time/60);
-  h+=`<div class="stats"><div><img src="${iconCanvas('firefly')}"><b>${S.fireflies}/${TOTAL_FIREFLIES}</b><span>Lumini</span></div><div><img src="${iconCanvas('piece')}"><b>${S.pieces%4}/4</b><span>Frammenti (tot. ${S.pieces})</span></div><div><img src="${iconCanvas('shell')}"><b>${S.shells}</b><span>Conchiglie</span></div><div><b class="big">${S.pages.length}/6</b><span>Pagine</span></div><div><b class="big">${m} min</b><span>Tempo</span></div><div><b class="big">${S.stats.kills}</b><span>Nemici</span></div></div>`;
+  h+=`<div class="stats"><div><img src="${iconCanvas('firefly')}"><b>${S.fireflies}/${TOTAL_FIREFLIES}</b><span>Lumini</span></div><div><img src="${iconCanvas('piece')}"><b>${S.pieces}/${TOTAL_PIECES}</b><span>Frammenti di cuore</span></div><div><img src="${iconCanvas('shell')}"><b>${S.shells}</b><span>Conchiglie</span></div><div><b class="big">${S.pages.length}/6</b><span>Pagine</span></div><div><b class="big">${m} min</b><span>Tempo</span></div><div><b class="big">${S.stats.kills}</b><span>Nemici</span></div></div>`;
   h+=`<h4>Lampioni di Brumafonda</h4><div class="row">${[6,12,18,24].map(n=>`<div class="pill ${S.fireflies>=n?'':'off'}">${S.fireflies>=n?'💡':'○'} ${n} lumini</div>`).join('')}</div>`;
  }
  if(menuTab==='diario'){
@@ -62,11 +64,11 @@ function renderMenu(){
  }
  if(menuTab==='trofei'){ h+='<div class="trophies">'; for(const [id,n,d] of TROPHIES){ const has=S.trophies[id]; h+=`<div class="tr ${has?'':'off'}"><b>${has?'🏆':'🔒'} ${esc(n)}</b><span>${esc(has?d:(id==='konami'||id==='gatto'?'???':d))}</span></div>`; } h+='</div>'; }
  if(menuTab==='opzioni'){
-  h+=`<h4>Comandi</h4><table class="keys"><tr><td>Muoversi</td><td>Frecce / WASD · joystick</td></tr><tr><td>A · Pertica, parla, apri</td><td>Spazio / J / Z</td></tr><tr><td>Fendente rotante</td><td>Tieni premuto A e rilascia</td></tr><tr><td>B · Oggetto</td><td>K / X</td></tr><tr><td>Cambia oggetto</td><td>Q / L / C · ⟳</td></tr><tr><td>Chiedi a Pip</td><td>P / H · ✦</td></tr><tr><td>Menu</td><td>Esc / M · ☰</td></tr></table>`;
+  h+=`<h4>Comandi</h4><table class="keys"><tr><td>Muoversi</td><td>Frecce / WASD · joystick</td></tr><tr><td>A · Pertica, parla, apri</td><td>Spazio / J / Z</td></tr><tr><td>Fendente rotante</td><td>Tieni premuto A e rilascia</td></tr><tr><td>B · Oggetto</td><td>K / X</td></tr><tr><td>Cambia oggetto</td><td>Q / C · ⟳</td></tr><tr><td>Salta (con gli stivali)</td><td>Maiusc / L / V · ⤒</td></tr><tr><td>Chiedi a Pip</td><td>P / H · ✦</td></tr><tr><td>Menu</td><td>Esc / M · ☰</td></tr></table>`;
   h+=`<div class="row"><button class="btn" id="optMute">${AU.muted?'Attiva audio':'Disattiva audio'}</button><button class="btn" id="optGuide">${S.flags.noGuide?'Mostra guida':'Nascondi guida'}</button><button class="btn" id="optTitle">Torna al titolo</button></div><p class="hint">Il gioco si salva da solo a ogni cambio di stanza.</p>`;
  }
  box.innerHTML=h;
- box.querySelectorAll('[data-it]').forEach(el=>el.addEventListener('click',()=>{ const k=el.dataset.it; if(k!=='pertica'&&S.items[k]){ S.sel=k; renderMenu(); AU.sfx('menu'); } }));
+ box.querySelectorAll('[data-it]').forEach(el=>el.addEventListener('click',()=>{ const k=el.dataset.it; if(k!=='pertica'&&k!=='stivali'&&S.items[k]){ S.sel=k; renderMenu(); AU.sfx('menu'); } }));
  const om=$('optMute'); om&&om.addEventListener('click',()=>{ AU.setMute(!AU.muted); $('bMute').textContent=AU.muted?'♪̸':'♪'; renderMenu(); });
  const og=$('optGuide'); og&&og.addEventListener('click',()=>{ S.flags.noGuide=!S.flags.noGuide; save(); renderMenu(); });
  const ot=$('optTitle'); ot&&ot.addEventListener('click',()=>{ save(); closeMenu(); showTitle(); });

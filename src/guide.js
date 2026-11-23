@@ -7,6 +7,8 @@ const QUESTS=[
  {id:'flame1', t:'Sconfiggi l\'Anguilla di Rame: Fiamma del Mare', done:()=>S.flags.flame1},
  {id:'campana', t:'Trova la Campana di Vetro nel Campanile', done:()=>S.items.campana},
  {id:'flame2', t:'Sconfiggi il Gufo d\'Ottone: Fiamma del Vento', done:()=>S.flags.flame2},
+ {id:'stivali', t:'Trova gli Stivali di Piuma nella Serra di Vetro', done:()=>S.items.stivali},
+ {id:'regina', t:'Sconfiggi la Regina Rovo: Corolla di Luce', done:()=>S.flags.regina},
  {id:'done', t:'Affronta Cenerale nel Nido della Falena', done:()=>S.flags.done}
 ];
 function curObjective(){
@@ -24,8 +26,13 @@ function curObjective(){
   if(w==='d3') return {t:!it.campana?'Campanile: spingi i due blocchi sulle piastre nella stanza a ovest':'Campanile: suona la campana per rompere la parete a est e scambiare i cristalli, poi sali'};
   return it.campana?{t:'Torna nel Campanile e sconfiggi il Gufo d\'Ottone',room:'ow:2,0',tile:[7,3]}:{t:'Attraversa l\'Abisso del Vento col rampino e accendi le due torce del Campanile',room:'ow:2,0',tile:[7,3]};
  }
+ if(!it.stivali||!f.regina){
+  if(w==='d4') return {t:!it.stivali?'Serra di Vetro: brucia i rovi nella stanza a ovest e sconfiggi gli Spinarelli':'Serra di Vetro: salta le buche a est per la chiave, poi accendi le 4 torce oltre la porta a nord'};
+  if(room&&room.key==='ow:0,1'&&tileAt(12,1)==='Z') return {t:'Rompi con la campana le rocce incrinate in alto a destra del Bosco Muschiato',room:'ow:0,1',tile:[12,1]};
+  return {t:!it.stivali?'Raggiungi la Serra di Vetro sull\'Altopiano dei Venti, a nord del Bosco Muschiato':'Torna nella Serra di Vetro e sconfiggi la Regina Rovo',room:'ow:0,0',tile:[7,1]};
+ }
  if(!f.done){
-  if(w==='fn') return {t:'Nido della Falena: brucia i rovi, agganciati all\'anello e rompi la parete con la campana'};
+  if(w==='fn') return {t:'Nido della Falena: brucia i rovi, salta la crepa (Maiusc / ⤒), agganciati all\'anello e rompi la parete con la campana'};
   return {t:'Entra nel Nido della Falena, a est del Campanile',room:'ow:3,0',tile:[7,1]};
  }
  if(S.fireflies<TOTAL_FIREFLIES) return {t:`Ritrova i lumini mancanti (${S.fireflies}/${TOTAL_FIREFLIES}) per il finale vero`};
@@ -79,3 +86,10 @@ function drawObjectiveBar(g){
  if(fl){ g.strokeStyle=`rgba(255,224,138,${fl})`; g.lineWidth=2.5; rr(g,x-1,y-1,w+2,h+2,7); g.stroke(); }
  g.textAlign='left'; ffText(g,'★',x+11,y+6+lh*0.78,'#ffe08a'); lines.forEach((l,i)=>ffText(g,l,x+30,y+6+lh*0.78+i*lh,'#ffffff'));
 }
+
+const SIDE_QUESTS=[
+ {t:'La Torta della Luna (Lalla)', st:()=>S.flags.cakeDone?2:S.flags.cakeAsked?1:0, info:()=>{ const n=Object.keys(S.ingr||{}).length; return `Ingredienti: ${n}/3`; }},
+ {t:'Il Coro del Lago (Prato delle Rane)', st:()=>S.flags.frogs?2:S.visited['ow:2,1']?1:0, info:()=>'Leggi il cartello vicino allo stagno'},
+ {t:'Il segreto di Bricco (il gatto)', st:()=>S.trophies.gatto?2:S.stats.cat>0?1:0, info:()=>`Chiacchierate: ${Math.min(S.stats.cat,10)}/10`},
+ {t:'Le pagine di Orsola (Strega Ortica)', st:()=>S.flags.ortica?2:S.pages.length>0?1:0, info:()=>`Pagine: ${S.pages.length}/6 (ne servono 3)`}
+];
