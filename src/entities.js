@@ -311,6 +311,7 @@ function bossDefeated(e){
  if(!P.dmgTaken) award('intatto');
  for(const x of ents) if(x.enemy&&x!==e){ x.dead=true; burst(x.x,x.y,['#fff'],8,80); }
  if(e.kind==='falena'){ setTimeout(()=>startEnding(),1600); return; }
+ if(e.kind==='regina'){ ents.push(mkEnt('container',e.x-30,e.y+40)); ents.push(mkEnt('corolla',e.x+30,e.y+40)); save(); return; }
  ents.push(mkEnt('container',e.x-30,Math.max(e.y,3*TS)+20));
  ents.push(mkEnt('flame',e.x+30,Math.max(e.y,3*TS)+20,{fi}));
  save();
@@ -319,7 +320,7 @@ EDEF.muffa.onDeath=bossDefeated; EDEF.anguilla.onDeath=bossDefeated; EDEF.gufo.o
 
 // ---------- raccolta ----------
 function collect(e){
- if(e.dead) return; e.dead=true; if(e.deco) return;
+ if(e.dead) return; e.dead=true; if(e.deco) return; if(collectExtra(e)){ save(); return; }
  switch(e.kind){
   case 'shell': S.shells=Math.min(999,S.shells+e.val); AU.sfx('coin'); if(!S.flags.firstShell){ S.flags.firstShell=1; pipSay('Una conchiglia! È la moneta della valle: spendila alla Bottega di Ciottolo, a sud del villaggio.'); } if(S.shells>=250) award('ricco'); break;
   case 'heart': S.hp=Math.min(S.maxhp,S.hp+2); AU.sfx('heart'); break;
@@ -342,8 +343,8 @@ function gainPiece(){ S.pieces++; AU.sfx('item'); P.hold='piece'; const n=S.piec
  else say([`Frammento di Cuore! (${n}/4)`, 'Raccogline quattro per ottenere un cuore intero.'],()=>P.hold=null); }
 function gainPage(i){ if(!S.pages.includes(i)) S.pages.push(i); AU.sfx('secret'); if(S.pages.length>=6) award('biblio');
  say([{paper:true,text:`Diario di Orsola — pagina ${i+1}\n\n${PAGES[i]}`}, `Pagine del diario: ${S.pages.length}/6.`]); }
-function giveItem(name){ S.items[name]=true; if(name!=='pertica') S.sel=name; AU.sfx('item'); P.hold=name;
- const tips={pertica:'Premi A (Spazio/J) per colpire. Tieni premuto e rilascia per il fendente rotante.',lanterna:'Equipaggiata nello slot B (tasto K). Prova sui rovi e sulle torce spente!',rampino:'Usalo con B (tasto K): mira a un anello dall\'altra parte del baratro.',campana:'Suonala con B (tasto K). Cambia oggetto con il pulsante ⟳ (tasto Q).'};
+function giveItem(name){ S.items[name]=true; if(name!=='pertica'&&name!=='stivali') S.sel=name; if(name==='stivali') document.body.classList.add('canjump'); AU.sfx('item'); P.hold=name;
+ const tips={pertica:'Premi A (Spazio/J) per colpire. Tieni premuto e rilascia per il fendente rotante.',lanterna:'Equipaggiata nello slot B (tasto K). Prova sui rovi e sulle torce spente!',rampino:'Usalo con B (tasto K): mira a un anello dall\'altra parte del baratro.',campana:'Suonala con B (tasto K). Cambia oggetto con il pulsante ⟳ (tasto Q).',stivali:'Si usano da soli: salta con Maiusc (o L) oppure con il pulsante verde ⤒. Prendi la rincorsa vicino al bordo della buca!'};
  say([`Hai ottenuto: ${ITEMS[name].name}!`, ITEMS[name].desc, tips[name]],()=>{P.hold=null; save();}); }
 function award(id){ if(S.trophies[id]) return; S.trophies[id]=1; const t=TROPHIES.find(x=>x[0]===id); if(!t) return; toast(`🏆 Trofeo: ${t[1]}`); AU.sfx('secret'); save(); }
 let toastQ=[]; function toast(t){ toastQ.push({t,life:3.2}); }
@@ -375,20 +376,21 @@ function drawIcon(g,name,x,y,s){ g.save(); g.translate(x,y); g.scale(s,s);
   case 'shell': drawShell(g,0,0,1,false); break;
   case 'piece': drawHeart(g,0,0,8,1,true); break;
   case 'container': drawHeart(g,0,0,10,1); break;
+  default: drawExtraIcon(g,name); break;
   case 'flame0': drawFlameIcon(g,0,0,0,1,T); break; case 'flame1': drawFlameIcon(g,0,0,1,1,T); break; case 'flame2': drawFlameIcon(g,0,0,2,1,T); break;
  }
  g.restore(); }
 
 // persona generica (NPC e protagonista)
 // ===================== PERSONAGGI (chibi con contorno) =====================
-const OL='#3a2433';
+const OL='#3a2433'; let personNoShadow=false;
 function shade(hex,k){ const n=parseInt(hex.slice(1),16); let r=n>>16,gg=(n>>8)&255,b=n&255; r=clamp(Math.round(r*k),0,255); gg=clamp(Math.round(gg*k),0,255); b=clamp(Math.round(b*k),0,255); return '#'+((1<<24)|(r<<16)|(gg<<8)|b).toString(16).slice(1); }
 function drawPerson(g,x,y,L,face,t,moving,walk){
  const s=L.size||1, side=face==='l'||face==='r', up=face==='u';
  const sw=moving?Math.sin(walk):0, bob=moving?-Math.abs(Math.sin(walk))*1.6:Math.sin(t*2.2+x)*0.5;
  const fo=(c,lw=1.3)=>{ g.fillStyle=c; g.fill(); g.strokeStyle=OL; g.lineWidth=lw; g.stroke(); };
  g.save(); g.translate(x,y); g.scale(s,s);
- drawSoftShadow(g,0,0,10,3.6,40,x,y);
+ if(!personNoShadow) drawSoftShadow(g,0,0,10,3.6,40,x,y);
  if(face==='l') g.scale(-1,1);
  if(L.turtle){ drawTurtle(g,face,t,fo); g.restore(); return; }
  const boots=L.boots||'#5a3a26', pants=L.pants||'#4a3a3a', body=L.body, body2=L.body2||shade(body,0.72), skin=L.skin, hair=L.hair;
