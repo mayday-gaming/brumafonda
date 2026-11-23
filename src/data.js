@@ -32,7 +32,7 @@ defRoom('ow:0,2',{name:'Radura dei Sussurri',music:'field',dark:0.15,
  "T.B.,.......,..T",
  "TTBB...,..B.TTTT",
  "TTTTTTT..TTTTTTT"],
- signs:["Radura dei Sussurri. Sull'isolotto riposa un cuore spezzato. Chi non ha ali, cerchi dei pali."]});
+ signs:["Radura dei Sussurri. Sull'isolotto riposa un cuore spezzato. Chi non ha ali, cerchi degli anelli."]});
 
 defRoom('ow:0,1',{name:'Bosco Muschiato',music:'field',dark:0.3,
  map:[
@@ -79,7 +79,7 @@ defRoom('ow:1,0',{name:'Abisso del Vento',music:'wind',dark:0.1,
  "R....,..O...RRRR",
  "R.......,...RRRR",
  "RRRRRRRPPRRRRRRR"],
- signs:["Chi vola senza ali, si aggrappa ai pali. — Ugo"]});
+ signs:["Chi vola senza ali, si aggancia agli anelli. — Ugo"]});
 
 defRoom('ow:2,0',{name:'Ai piedi del Campanile',music:'wind',dark:0.15,
  map:[
@@ -149,12 +149,12 @@ defRoom('ow:3,1',{name:'Cimitero dei Lampioni',music:'dark',dark:0.55,
  "Bug #404. Mai trovato.",
  "Ernesta, che disse: «Ma cosa vuoi che succeda se tocco la falena?»",
  "Qui riposa un salvataggio corrotto. Pace all'anima sua.",
- "Pippo il Primo, lucciola. Brillò poco, ma brillò bene.",
+ "Pippo il Primo, lumino. Brillò poco, ma brillò bene.",
  "Torno subito. — Il Fantasma",
  "Ha premuto il tasto sbagliato. Una volta sola.",
  "Il Cavaliere senza Pertica. Sfidò un cespuglio a mani nude. Perse.",
  "Anselmo. Amava i gatti. I gatti lo tolleravano.",
- "Rosalba la Fornaia. Il suo pane era duro, il suo cuore no.",
+ "Rosalba la Fornaia. Il suo pane era raffermo, il suo cuore no.",
  "Questa lapide è vuota. Per ora.",
  "Lampionaio Ignoto. Accese la luce per tutti, e nessuno ricorda il suo nome.",
  "Se stai leggendo questa lapide hai davvero troppo tempo libero. Ti vogliamo bene.",
@@ -363,7 +363,7 @@ defRoom('d2:1,3',{name:'Faro Sommerso',music:'water',dark:0.35,
  "#W____________W#",
  "#WW____E_____WW#",
  "################"],
- signs:["Diario del guardiano: «L'anguilla ama la luce. Quando la vedi brillare, afferrala.»"],
+ signs:["Diario del guardiano: «L'anguilla ama la luce. Quando la vedi brillare, agganciala.»"],
  warps:[{to:'ow:3,3',x:12,y:4}]});
 defRoom('d2:1,2',{name:'Faro Sommerso',music:'water',dark:0.35,
  map:[
@@ -562,7 +562,7 @@ const PAGE_SRC = {'tito':0,'ow:3,1':1,'ow:1,0':2,'frogs':3,'d1:2,1':4,'d3:1,1':5
 const ITEMS = {
  pertica:{name:'Pertica del Lampionaio',desc:'Lunga, robusta, profuma di fumo. Tieni premuto A e rilascia per un fendente rotante.'},
  lanterna:{name:'Lanterna di Orsola',desc:'Lancia una fiammata: brucia i rovi, accende le torce, illumina gli spettri.'},
- rampino:{name:'Rampino del Guardiano',desc:'Si aggancia ai pali e ti tira oltre i baratri. Stordisce i nemici e afferra gli oggetti.'},
+ rampino:{name:'Rampino del Guardiano',desc:'Si aggancia agli anelli e ti porta oltre i baratri. Stordisce i nemici e recupera gli oggetti.'},
  campana:{name:'Campana di Vetro',desc:'Il suo rintocco frantuma le pareti incrinate, stordisce i nemici e scambia i cristalli.'}
 };
 
@@ -580,7 +580,7 @@ const TROPHIES = [
  ['ricco','Ricco sfondato','Possiedi 250 conchiglie.'],
  ['intatto','Senza un graffio','Sconfiggi un boss senza subire danni.'],
  ['biblio','Archivista','Trova tutte le 6 pagine del diario.'],
- ['lucciole','Custode delle lucciole','Ritrova tutte le 24 lucciole.'],
+ ['lucciole','Custode dei lumini','Ritrova tutti i 24 lumini.'],
  ['fine','La notte è finita','Completa il gioco.'],
  ['cuore','Cuore intero','Ricomponi un cuore con 4 frammenti.']
 ];

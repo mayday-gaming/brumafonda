@@ -25,10 +25,10 @@ function curObjective(){
   return it.campana?{t:'Torna nel Campanile e sconfiggi il Gufo d\'Ottone',room:'ow:2,0',tile:[7,3]}:{t:'Attraversa l\'Abisso del Vento col rampino e accendi le due torce del Campanile',room:'ow:2,0',tile:[7,3]};
  }
  if(!f.done){
-  if(w==='fn') return {t:'Nido della Falena: brucia i rovi, aggrappati al palo e rompi la parete con la campana'};
+  if(w==='fn') return {t:'Nido della Falena: brucia i rovi, agganciati all\'anello e rompi la parete con la campana'};
   return {t:'Entra nel Nido della Falena, a est del Campanile',room:'ow:3,0',tile:[7,1]};
  }
- if(S.fireflies<TOTAL_FIREFLIES) return {t:`Ritrova le lucciole mancanti (${S.fireflies}/${TOTAL_FIREFLIES}) per il finale vero`};
+ if(S.fireflies<TOTAL_FIREFLIES) return {t:`Ritrova i lumini mancanti (${S.fireflies}/${TOTAL_FIREFLIES}) per il finale vero`};
  return {t:'Hai completato tutto. Grazie per aver giocato!'};
 }
 // grafo delle stanze del mondo esterno (bordi percorribili)

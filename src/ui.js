@@ -1,7 +1,7 @@
 // ===================== INTERFACCIA HTML =====================
 const $=id=>document.getElementById(id);
 let menuOpen=false, shopOpen=false, menuTab='missione';
-function showTitle(){ $('title').classList.remove('hidden'); mode='title'; AU.setMusic('title'); const s=loadSave(); $('btnCont').disabled=!s; $('btnCont').textContent=s?`Continua  ·  ${s.fireflies||0}/${TOTAL_FIREFLIES} lucciole`:'Continua'; }
+function showTitle(){ $('title').classList.remove('hidden'); mode='title'; AU.setMusic('title'); const s=loadSave(); $('btnCont').disabled=!s; $('btnCont').textContent=s?`Continua  ·  ${s.fireflies||0}/${TOTAL_FIREFLIES} lumini`:'Continua'; }
 function startGame(cont){
  AU.init(); S=cont&&loadSave()||newState(); if(!S.stats.frogseq) S.stats.frogseq=[];
  $('title').classList.add('hidden');
@@ -49,12 +49,12 @@ function renderMenu(){
   for(let y=0;y<=my;y++) for(let x=0;x<=mx;x++){ const k=w+':'+x+','+y, r=ROOMS[k]; if(!r){ h+='<div class="mc none"></div>'; continue; }
    const vis=S.visited[k], here=room.key===k; let ff=0; if(S.flags.bussola){ r.map.forEach((row,yy)=>[...row].forEach((c,xx)=>{ if(c==='f'&&!S.got[k+'|f|'+xx+','+yy]) ff++; })); }
    h+=`<div class="mc ${vis?'vis':''} ${here?'here':''} ${r.boss?'boss':''}"><span>${vis?esc(r.name):'?'}</span>${ff?`<i>✦${ff}</i>`:''}${here?'<em>●</em>':''}</div>`; }
-  h+='</div>'; h+=`<p class="hint">${S.flags.bussola?'✦ = lucciole ancora nascoste in quella zona.':'La Bussola delle Lucciole di Ciottolo mostrerebbe dove si nascondono le lucciole.'}</p>`;
+  h+='</div>'; h+=`<p class="hint">${S.flags.bussola?'✦ = lumini ancora nascosti in quella zona.':'La Bussola dei Lumini di Ciottolo mostrerebbe dove si nascondono i lumini.'}</p>`;
  }
  if(menuTab==='collezione'){
   const m=Math.floor(S.stats.time/60);
-  h+=`<div class="stats"><div><img src="${iconCanvas('firefly')}"><b>${S.fireflies}/${TOTAL_FIREFLIES}</b><span>Lucciole</span></div><div><img src="${iconCanvas('piece')}"><b>${S.pieces%4}/4</b><span>Frammenti (tot. ${S.pieces})</span></div><div><img src="${iconCanvas('shell')}"><b>${S.shells}</b><span>Conchiglie</span></div><div><b class="big">${S.pages.length}/6</b><span>Pagine</span></div><div><b class="big">${m} min</b><span>Tempo</span></div><div><b class="big">${S.stats.kills}</b><span>Nemici</span></div></div>`;
-  h+=`<h4>Lampioni di Brumafonda</h4><div class="row">${[6,12,18,24].map(n=>`<div class="pill ${S.fireflies>=n?'':'off'}">${S.fireflies>=n?'💡':'○'} ${n} lucciole</div>`).join('')}</div>`;
+  h+=`<div class="stats"><div><img src="${iconCanvas('firefly')}"><b>${S.fireflies}/${TOTAL_FIREFLIES}</b><span>Lumini</span></div><div><img src="${iconCanvas('piece')}"><b>${S.pieces%4}/4</b><span>Frammenti (tot. ${S.pieces})</span></div><div><img src="${iconCanvas('shell')}"><b>${S.shells}</b><span>Conchiglie</span></div><div><b class="big">${S.pages.length}/6</b><span>Pagine</span></div><div><b class="big">${m} min</b><span>Tempo</span></div><div><b class="big">${S.stats.kills}</b><span>Nemici</span></div></div>`;
+  h+=`<h4>Lampioni di Brumafonda</h4><div class="row">${[6,12,18,24].map(n=>`<div class="pill ${S.fireflies>=n?'':'off'}">${S.fireflies>=n?'💡':'○'} ${n} lumini</div>`).join('')}</div>`;
  }
  if(menuTab==='diario'){
   if(!S.pages.length) h+='<p class="hint">Nessuna pagina trovata. Il diario di Nonna Orsola è sparso per la valle.</p>';

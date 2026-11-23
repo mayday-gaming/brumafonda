@@ -162,7 +162,7 @@ const EDEF={
  // ---------- boss ----------
  muffa:{enemy:1,hp:6,r:26,col:'#d08cff',boss:1,noKb:1,invT:0.5,name:'MADRE MUFFA',sub:'Regina delle Spore',
   init(e){ e.boss=true; e.burn=0; e.cd=1.5; e.sum=4; e.hinted=0; },
-  onHit(e,dmg,src){ if(src.type==='fire'){ if(e.burn<=0){ e.burn=4.5; AU.sfx('burn'); burst(e.x,e.y-40,['#ff8a3c','#ffe08a'],20,150,3,'ember'); } return 'ignore'; } if(e.burn<=0){ if(!e.hinted){e.hinted=1; pipSay('La cappella è troppo dura! Prova con il fuoco!');} return 'block'; } return 1; },
+  onHit(e,dmg,src){ if(src.type==='fire'){ if(e.burn<=0){ e.burn=4.5; AU.sfx('burn'); burst(e.x,e.y-40,['#ff8a3c','#ffe08a'],20,150,3,'ember'); } return 'ignore'; } if(e.burn<=0){ if(!e.hinted){e.hinted=1; pipSay('Il cappello del fungo è troppo resistente! Prova con il fuoco!');} return 'block'; } return 1; },
   update(e,dt){ e.burn-=dt; e.cd-=dt; e.sum-=dt; e.x=8*TS+Math.sin(e.t*0.6)*90; e.y=3.8*TS;
    if(e.cd<=0){ e.cd=e.burn>0?2.4:1.6; const n=5, base=Math.atan2(P.y-e.y,P.x-e.x); for(let i=0;i<n;i++){ const a=base+(i-2)*0.28; projs.push({k:'spore',x:e.x,y:e.y-20,vx:Math.cos(a)*120,vy:Math.sin(a)*120,life:3,hostile:1,dmg:1}); } AU.tone(180,0.3,'sine',0.08,0.5); }
    if(e.sum<=0){ e.sum=6; if(ents.filter(x=>x.kind==='muffolo').length<3){ for(const s of [-1,1]){ const m=mkEnt('muffolo',e.x+s*30,e.y+20,{small:true}); m.hp=m.maxhp=1; m.r=7; ents.push(m);} burst(e.x,e.y,['#9be07a','#c49be0'],16,120); } } },
@@ -334,7 +334,7 @@ function collect(e){
  }
  save();
 }
-function gainFirefly(){ S.fireflies++; if(S.fireflies===1) setTimeout(()=>pipSay('Una lucciola persa! Ogni 6 che ritroviamo, un lampione di Brumafonda si riaccende.'),1200); AU.sfx('firefly'); floatText(P.x,P.y-44,`Lucciola ritrovata! ${S.fireflies}/${TOTAL_FIREFLIES}`,'#eaff8a'); burst(P.x,P.y-20,['#eaff8a','#fff'],16,90,2,'spark');
+function gainFirefly(){ S.fireflies++; if(S.fireflies===1) setTimeout(()=>pipSay('Un lumino perso! Ogni 6 che ritroviamo, un lampione di Brumafonda si riaccende.'),1200); AU.sfx('firefly'); floatText(P.x,P.y-44,`Lumino ritrovato! ${S.fireflies}/${TOTAL_FIREFLIES}`,'#eaff8a'); burst(P.x,P.y-20,['#eaff8a','#fff'],16,90,2,'spark');
  if([6,12,18,24].includes(S.fireflies)) setTimeout(()=>pipSay('Un lampione di Brumafonda si è appena acceso!'),900);
  if(S.fireflies>=TOTAL_FIREFLIES) award('lucciole'); }
 function gainPiece(){ S.pieces++; AU.sfx('item'); P.hold='piece'; const n=S.pieces%4;
@@ -343,13 +343,13 @@ function gainPiece(){ S.pieces++; AU.sfx('item'); P.hold='piece'; const n=S.piec
 function gainPage(i){ if(!S.pages.includes(i)) S.pages.push(i); AU.sfx('secret'); if(S.pages.length>=6) award('biblio');
  say([{paper:true,text:`Diario di Orsola — pagina ${i+1}\n\n${PAGES[i]}`}, `Pagine del diario: ${S.pages.length}/6.`]); }
 function giveItem(name){ S.items[name]=true; if(name!=='pertica') S.sel=name; AU.sfx('item'); P.hold=name;
- const tips={pertica:'Premi A (Spazio/J) per colpire. Tieni premuto e rilascia per il fendente rotante.',lanterna:'Equipaggiata nello slot B (tasto K). Prova sui rovi e sulle torce spente!',rampino:'Usalo con B (tasto K): punta un palo dall\'altra parte del baratro.',campana:'Suonala con B (tasto K). Cambia oggetto con il pulsante ⟳ (tasto Q).'};
+ const tips={pertica:'Premi A (Spazio/J) per colpire. Tieni premuto e rilascia per il fendente rotante.',lanterna:'Equipaggiata nello slot B (tasto K). Prova sui rovi e sulle torce spente!',rampino:'Usalo con B (tasto K): mira a un anello dall\'altra parte del baratro.',campana:'Suonala con B (tasto K). Cambia oggetto con il pulsante ⟳ (tasto Q).'};
  say([`Hai ottenuto: ${ITEMS[name].name}!`, ITEMS[name].desc, tips[name]],()=>{P.hold=null; save();}); }
 function award(id){ if(S.trophies[id]) return; S.trophies[id]=1; const t=TROPHIES.find(x=>x[0]===id); if(!t) return; toast(`🏆 Trofeo: ${t[1]}`); AU.sfx('secret'); save(); }
 let toastQ=[]; function toast(t){ toastQ.push({t,life:3.2}); }
 function pipSay(t){ pipMsg={text:t,life:3.6}; }
 let pipMsg=null;
-function onKonami(){ if(!S||mode==='title'){ pendingKonami=true; AU.sfx('secret'); const el=document.getElementById('logo'); el&&el.classList.add('rainbow'); return; } S.konami=true; award('konami'); AU.sfx('secret'); floatText(P.x,P.y-50,'Modalità Lucciola Arcobaleno!','#ffb3f0'); }
+function onKonami(){ if(!S||mode==='title'){ pendingKonami=true; AU.sfx('secret'); const el=document.getElementById('logo'); el&&el.classList.add('rainbow'); return; } S.konami=true; award('konami'); AU.sfx('secret'); floatText(P.x,P.y-50,'Modalità Arcobaleno!','#ffb3f0'); }
 let pendingKonami=false;
 
 // ---------- disegni condivisi ----------

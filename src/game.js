@@ -284,17 +284,17 @@ function startEnding(){
  const lines=tru?[
   'Cenerale cade a terra. Le sue ali tremano come foglie secche.',
   {fn:()=>{ for(let i=0;i<24;i++) setTimeout(()=>{ ents.push(mkEnt('firefly',P.x+rand(-150,150),P.y+rand(-120,40),{gid:'end'+i,deco:1})); AU.tone(880*2**(((rand(0,12))|0)/12),0.3,'sine',0.05); },i*80); }},
-  'Le ventiquattro lucciole che hai ritrovato si alzano dal tuo zaino e gli volano intorno, piano.',
+  'I ventiquattro lumini che hai ritrovato si alzano dal tuo zaino e gli volano intorno, piano.',
   'Cenerale: Così... tante luci. E nessuna chiusa in una stanza.',
   'Pip: Non devi tenerla stretta, la luce. Basta stare vicini.',
   'Una voce lontana, che sa di pane e di fumo: «Torna a casa, piccolo.»',
-  'La cenere scivola via dalle sue ali. Sotto, c\'è una lucciola minuscola, un po\' spaventata.',
-  'Cenerale: ...posso venire con voi?'
+  'La cenere scivola via dalle sue ali. Sotto, c\'è un lumino minuscolo, un po\' spaventato.',
+  'Cenerale: ...posso restare con voi?'
  ]:[
   'Cenerale cade a terra. Le sue ali si sbriciolano in cenere grigia.',
   'Cenerale: Fa... così buio...',
   'Le tre Fiamme si alzano in volo verso Brumafonda.',
-  'Pip: Ilio... mi sembra che mancasse qualcosa. Se avessimo ritrovato tutte le lucciole, forse...'
+  'Pip: Ilio... mi sembra che mancasse qualcosa. Se avessimo ritrovato tutti i lumini, forse...'
  ];
  say(lines,()=>{ mode='ending'; END={t:0,tru,scroll:0}; AU.setMusic('title'); });
 }

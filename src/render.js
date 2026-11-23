@@ -250,8 +250,8 @@ function renderEnding(g){
  show(END.tru?'La notte è finita.':'La Lanterna arde di nuovo.',70,30,'#fff3d0',0.5);
  show(END.tru?'Brumafonda ha ritrovato la sua luce... e un nuovo amico.':'Ma da qualche parte, una piccola ombra ha ancora paura del buio.',100,14,'#f0e0ff',1.5);
  const m=Math.floor(S.stats.time/60), s=Math.floor(S.stats.time%60);
- const rows=[`Tempo di gioco: ${m}m ${String(s).padStart(2,'0')}s`,`Lucciole: ${S.fireflies}/${TOTAL_FIREFLIES}`,`Pagine del diario: ${S.pages.length}/6`,`Frammenti di cuore: ${S.pieces}/4`,`Trofei: ${Object.keys(S.trophies).length}/${TROPHIES.length}`,`Nemici sconfitti: ${S.stats.kills}   ·   Cadute: ${S.stats.falls}`];
+ const rows=[`Tempo di gioco: ${m}m ${String(s).padStart(2,'0')}s`,`Lumini: ${S.fireflies}/${TOTAL_FIREFLIES}`,`Pagine del diario: ${S.pages.length}/6`,`Frammenti di cuore: ${S.pieces}/4`,`Trofei: ${Object.keys(S.trophies).length}/${TROPHIES.length}`,`Nemici sconfitti: ${S.stats.kills}   ·   Cadute: ${S.stats.falls}`];
  rows.forEach((r,i)=>show(r,145+i*22,15,'#ffe9d6',3+i*0.4));
- show(END.tru?'FINALE VERO':'Ritrova tutte le lucciole per il finale vero.',288,13,END.tru?'#eaff8a':'#cdbfe0',6);
+ show(END.tru?'FINALE VERO':'Ritrova tutti i lumini per il finale vero.',288,13,END.tru?'#eaff8a':'#cdbfe0',6);
  if(t>4&&Math.sin(T*4)>0) show('Premi A per tornare al titolo',GH-24,13,'#ffcf6b',4);
 }

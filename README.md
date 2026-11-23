@@ -27,7 +27,7 @@ The current objective is always shown at the bottom left, a golden arrow points 
 - 15 overworld screens and 4 dungeons (Tana del Fungo, Faro Sommerso, Campanile Spezzato, Nido della Falena)
 - 4 items: the lamplighter's pole, lantern, grappling hook, glass bell
 - 7 enemy types and 4 bosses, each beaten with a different item
-- Collectibles: 24 lost fireflies, 4 heart pieces, 6 diary pages, seashells (currency), 16 trophies
+- Collectibles: 24 lost "lumini" (little living lights), 4 heart pieces, 6 diary pages, seashells (currency), 16 trophies
 - Two endings, a shop, and several easter eggs
 
 ## Development
