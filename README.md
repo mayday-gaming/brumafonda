@@ -14,7 +14,8 @@ Ilio, a young apprentice lamplighter, and Pip, a very talkative firefly, set out
 | Attack, talk, open (A) | Space / J / Z | A |
 | Spin attack | Hold A and release | Hold A |
 | Use item (B) | K / X | B |
-| Switch item | Q / L / C | ⟳ |
+| Switch item | Q / C | ⟳ |
+| Jump (feather boots) | Shift / L / V | ⤒ |
 | Ask Pip for a hint | P / H | ✦ |
 | Menu | Esc / M / Tab | ☰ |
 
@@ -24,11 +25,11 @@ The current objective is always shown at the bottom left, a golden arrow points 
 
 ## Content
 
-- 15 overworld screens and 4 dungeons (Tana del Fungo, Faro Sommerso, Campanile Spezzato, Nido della Falena)
-- 4 items: the lamplighter's pole, lantern, grappling hook, glass bell
-- 7 enemy types and 4 bosses, each beaten with a different item
-- Collectibles: 24 lost "lumini" (little living lights), 4 heart pieces, 6 diary pages, seashells (currency), 16 trophies
-- Two endings, a shop, and several easter eggs
+- 16 overworld screens and 5 dungeons (Tana del Fungo, Faro Sommerso, Campanile Spezzato, Serra di Vetro, Nido della Falena)
+- 5 items: the lamplighter's pole, lantern, grappling hook, glass bell, feather boots (jump), plus the Corolla di Luce lantern upgrade
+- 9 enemy types and 5 bosses, each beaten with a different item
+- Collectibles: 30 lost "lumini" (little living lights), 8 heart pieces, 6 diary pages, seashells (currency), 16 trophies
+- Side quests (Lalla's Moon Cake, the frog choir, the cat's secret, Orsola's diary), two endings, a shop and several easter eggs
 
 ## Development
 
@@ -49,6 +50,7 @@ Every push to `main` rebuilds the game and publishes it to the `gh-pages` branch
 | `src/world.js` | Room loading, collisions, tile rendering |
 | `src/paint.js` | Watercolor post-processing, paper, foliage, shadows, clouds |
 | `src/entities.js` | Enemies, bosses, pickups, character renderer |
+| `src/expansion.js` | Glass Greenhouse enemies, Bramble Queen boss, expansion pickups |
 | `src/npc.js` | NPC dialogue, Pip hints, shop |
 | `src/guide.js` | Objectives, path arrow, quest log |
 | `src/game.js` | Player, items, interactions, dialogue, update loop |
